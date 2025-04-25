@@ -99,7 +99,9 @@ export function ResultExplanation({
 
     const current = typeof value === "string" ? parseFloat(value) : value;
     const previous =
-      typeof previousValue === "string" ? parseFloat(previousValue) : previousValue;
+      typeof previousValue === "string"
+        ? parseFloat(previousValue)
+        : previousValue;
     const diff = current - previous;
     const percentChange = previous !== 0 ? (diff / previous) * 100 : 0;
 
@@ -163,7 +165,10 @@ export function ResultExplanation({
                 "Follow up with your doctor for additional testing if needed",
               ],
               resources: [
-                { title: "American Diabetes Association", url: "https://diabetes.org" },
+                {
+                  title: "American Diabetes Association",
+                  url: "https://diabetes.org",
+                },
                 { title: "Managing high blood sugar", url: "#" },
                 { title: "Diet tips for blood sugar control", url: "#" },
               ],
@@ -197,7 +202,10 @@ export function ResultExplanation({
                   "Discuss with your doctor if medication might be appropriate",
                 ],
                 resources: [
-                  { title: "American Heart Association", url: "https://heart.org" },
+                  {
+                    title: "American Heart Association",
+                    url: "https://heart.org",
+                  },
                   { title: "Foods that help lower LDL cholesterol", url: "#" },
                   { title: "Understanding cholesterol medications", url: "#" },
                 ],
@@ -226,9 +234,7 @@ export function ResultExplanation({
                   "Maintain your current exercise and dietary habits",
                   "Discuss with your doctor at your next appointment",
                 ],
-                resources: [
-                  { title: "Benefits of HDL cholesterol", url: "#" },
-                ],
+                resources: [{ title: "Benefits of HDL cholesterol", url: "#" }],
               }
             : {
                 short: "Your HDL ('good') cholesterol is lower than optimal.",
@@ -257,7 +263,10 @@ export function ResultExplanation({
                   "Discuss with your doctor if additional tests or treatments might be appropriate",
                 ],
                 resources: [
-                  { title: "National Heart, Lung, and Blood Institute", url: "#" },
+                  {
+                    title: "National Heart, Lung, and Blood Institute",
+                    url: "#",
+                  },
                   { title: "Heart-healthy diet tips", url: "#" },
                 ],
               }
@@ -287,7 +296,10 @@ export function ResultExplanation({
                   "Follow up with your healthcare provider for possible treatment options",
                 ],
                 resources: [
-                  { title: "American Thyroid Association", url: "https://www.thyroid.org" },
+                  {
+                    title: "American Thyroid Association",
+                    url: "https://www.thyroid.org",
+                  },
                   { title: "Understanding hypothyroidism", url: "#" },
                 ],
               }
@@ -301,7 +313,10 @@ export function ResultExplanation({
                   "Follow up with your healthcare provider for evaluation",
                 ],
                 resources: [
-                  { title: "American Thyroid Association", url: "https://www.thyroid.org" },
+                  {
+                    title: "American Thyroid Association",
+                    url: "https://www.thyroid.org",
+                  },
                   { title: "Understanding hyperthyroidism", url: "#" },
                 ],
               };
@@ -315,9 +330,7 @@ export function ResultExplanation({
                   "Discuss with your doctor for proper interpretation with other thyroid test results",
                   "Follow up for possible additional testing or treatment",
                 ],
-                resources: [
-                  { title: "Managing thyroid disorders", url: "#" },
-                ],
+                resources: [{ title: "Managing thyroid disorders", url: "#" }],
               }
             : {
                 short: "Your thyroid hormone level is lower than normal.",
@@ -327,9 +340,7 @@ export function ResultExplanation({
                   "Discuss with your doctor for proper interpretation with other thyroid test results",
                   "Follow up for possible additional testing or treatment",
                 ],
-                resources: [
-                  { title: "Thyroid hormone replacement", url: "#" },
-                ],
+                resources: [{ title: "Thyroid hormone replacement", url: "#" }],
               };
         }
 
@@ -417,7 +428,9 @@ export function ResultExplanation({
         )}
         <div className="w-full">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm font-medium text-gray-700">{explanation.short}</p>
+            <p className="text-sm font-medium text-gray-700">
+              {explanation.short}
+            </p>
             {trend && (
               <div
                 className={cn(
@@ -456,7 +469,9 @@ export function ResultExplanation({
                 <div className="bg-white/60 rounded-md p-2 mb-3">
                   <div className="flex items-start mb-2">
                     <Lightbulb className="h-4 w-4 text-amber-500 mr-1.5 mt-0.5 flex-shrink-0" />
-                    <p className="text-sm text-gray-600">{explanation.detail}</p>
+                    <p className="text-sm text-gray-600">
+                      {explanation.detail}
+                    </p>
                   </div>
                   {referenceRange && (
                     <div className="text-xs text-gray-500 mb-1">
