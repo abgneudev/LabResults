@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Lightbulb, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useResultInterpretation } from "@/hooks/use-result-interpretation";
+
+interface InterpretationCardProps {
+  status: string;
+  className?: string;
+}
+
+export function InterpretationCard({
+  status,
+  className,
+}: InterpretationCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { summary, recommendation, isLoading, error } =
+    useResultInterpretation(status);
+
+  // If there's an error, don't render anything
+  if (error) {
+    return null;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={cn(
+        "bg-[#E5F8FF] overflow-hidden rounded-lg border border-[#E5F8FF] mb-4",
+        className
+      )}
+    >
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#03659C] focus-visible:ring-offset-2"
+        aria-expanded={isExpanded}
+      >
+        <div className="flex items-center">
+          <Lightbulb className="h-4 w-4 text-amber-500 mr-2" />
+          <span className="text-sm font-medium text-[#03659C]">
+            Explain this result
+          </span>
+        </div>
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 text-[#03659C] transition-transform duration-200",
+            isExpanded ? "transform rotate-180" : ""
+          )}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 pb-4">
+              {isLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-4 w-4 text-[#03659C] mr-2 animate-spin" />
+                  <span className="text-sm text-[#03659C]">
+                    Generating interpretation...
+                  </span>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-sm text-[#03659C]">{summary}</p>
+                  {recommendation && (
+                    <p className="text-sm text-[#03659C]/80">
+                      {recommendation}
+                    </p>
+                  )}
+                  <div className="text-xs text-[#03659C]/60 italic">
+                    Note: This is an AI-generated interpretation and should not
+                    replace professional medical advice.
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
