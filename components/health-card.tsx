@@ -167,7 +167,10 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
       </div>
 
       <div className="ml-12">
-        <Link href={`/results/${metric.id}`}>
+        <Link
+          href={`/results/${metric.id}`}
+          aria-label={`View details for ${metric.name}: ${metric.value} ${metric.unit}, status: ${metric.status}`}
+        >
           <div
             className={cn(
               "rounded-lg overflow-hidden shadow-sm transition-all duration-200 hover:shadow-md",
@@ -182,7 +185,7 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="font-semibold text-gray-800 text-base">
+                  <h3 className="font-semibold text-gray-900 text-base">
                     {metric.name}
                   </h3>
                 </div>
@@ -190,28 +193,37 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
               </div>
 
               <div className="flex items-end justify-between mt-0.5">
-                <div className="text-2xl font-bold text-gray-800">
+                <div className="text-2xl font-bold text-gray-900">
                   {metric.value}{" "}
-                  <span className="text-sm font-normal ml-1">
+                  <span className="text-sm font-medium ml-1 text-gray-800">
                     {metric.unit}
                   </span>
                 </div>
 
                 {hasTrend && (
-                  <div className={cn("flex items-center text-xs", trendColor)}>
+                  <div
+                    className={cn(
+                      "flex items-center text-xs font-semibold",
+                      trendColor
+                    )}
+                    aria-label={`Trend: ${trendText}`}
+                  >
                     {React.createElement(trendIcon, {
                       size: 14,
                       className: "mr-1",
+                      "aria-hidden": "true",
                     })}
-                    <span className="font-medium">{trendText}</span>
+                    <span>{trendText}</span>
                   </div>
                 )}
               </div>
 
-              <div className="text-xs text-gray-500 flex items-center mt-0.5">
-                <Info className="h-3 w-3 mr-1" />
-                <span className="font-light">
-                  {formattedDate} • {getNormalRange(metric.id)}
+              <div className="text-xs text-gray-800 flex items-center mt-0.5 font-medium">
+                <Info className="h-3 w-3 mr-1" aria-hidden="true" />
+                <span>
+                  {formattedDate} •{" "}
+                  <span className="font-semibold">Normal range:</span>{" "}
+                  {getNormalRange(metric.id)}
                 </span>
               </div>
             </div>
@@ -225,18 +237,22 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
               e.preventDefault();
               setIsExpanded(!isExpanded);
             }}
-            className="w-full py-1.5 px-3 flex justify-between items-center text-xs font-medium text-left text-gray-600 hover:bg-[#FAFEFF] transition-colors rounded-lg"
+            className="w-full py-1.5 px-3 flex justify-between items-center text-xs font-medium text-left text-gray-700 hover:bg-[#FAFEFF] transition-colors rounded-lg"
             aria-expanded={isExpanded}
             aria-controls={`info-${metric.id}`}
           >
             <div className="flex items-center">
-              <Info className="h-3 w-3 mr-1.5 text-gray-500" />
+              <Info
+                className="h-3 w-3 mr-1.5 text-gray-700"
+                aria-hidden="true"
+              />
               <span>What this means</span>
             </div>
             <ChevronDown
               className={`h-3 w-3 transition-transform duration-200 ${
                 isExpanded ? "transform rotate-180" : ""
               }`}
+              aria-hidden="true"
             />
           </button>
 
@@ -250,10 +266,10 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
               id={`info-${metric.id}`}
             >
               <div>
-                <span className="font-semibold text-gray-800 block mb-1">
+                <span className="font-semibold text-gray-900 block mb-1">
                   Why it matters:
                 </span>
-                <span className="text-gray-600 font-normal">
+                <span className="text-gray-800 font-normal">
                   {getWhyItMatters(metric.id)}
                 </span>
               </div>
@@ -261,13 +277,14 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
                 <div className="flex items-center mb-1">
                   {React.createElement(getCategoryIcon(metric.category), {
                     size: 14,
-                    className: "mr-1.5 text-gray-700",
+                    className: "mr-1.5 text-gray-800",
+                    "aria-hidden": "true",
                   })}
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-900">
                     Lifestyle tip:
                   </span>
                 </div>
-                <p className="text-gray-600 font-normal">
+                <p className="text-gray-800 font-normal">
                   {getLifestyleTip(metric.id)}
                 </p>
               </div>

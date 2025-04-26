@@ -19,7 +19,12 @@ export function StickyMenu() {
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
       <div className="max-w-md mx-auto flex justify-around items-center">
         {menuItems.map((item) => {
-          const isActive = pathname === item.path;
+          // Consider both "/" and "/results" as home for highlighting purposes
+          const isActive =
+            item.path === "/"
+              ? pathname === "/" || pathname === "/results"
+              : pathname === item.path;
+
           return (
             <Link
               key={item.name}

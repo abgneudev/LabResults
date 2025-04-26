@@ -15,7 +15,7 @@ export function UploadLabsCta() {
       <div className="rounded-xl bg-white shadow-sm p-5 border border-gray-200 text-center">
         {/* Short text explanation above icons */}
         <p className="text-sm font-normal text-[#5f6368] mb-4">
-          Extract key health data and receive easy-to-understand explaination of
+          Extract key health data and receive easy-to-understand explanation of
           what it means.
         </p>
 

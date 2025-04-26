@@ -149,10 +149,9 @@ export function ResultsSummary({
           <TabsTrigger
             value="new"
             className={cn(
-              (className =
-                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
+              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
               activeTab === "new"
-                ? "bg-blue-500 text-white font-medium"
+                ? "bg-[#03659C] text-white font-medium ring-2 ring-[#03659C] ring-offset-2"
                 : "text-gray-600 hover:bg-gray-50"
             )}
           >
@@ -165,10 +164,9 @@ export function ResultsSummary({
           <TabsTrigger
             value="upcoming"
             className={cn(
-              (className =
-                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
+              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
               activeTab === "upcoming"
-                ? (className = "bg-[#03659C] text-white font-medium")
+                ? "bg-[#03659C] text-white font-medium ring-2 ring-[#03659C] ring-offset-2"
                 : "text-gray-600 hover:bg-gray-50"
             )}
           >
@@ -181,17 +179,16 @@ export function ResultsSummary({
           <TabsTrigger
             value="last"
             className={cn(
-              (className =
-                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
+              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
               activeTab === "last"
-                ? "bg-blue-500 text-white font-medium"
+                ? "bg-blue-500 text-white font-medium ring-2 ring-blue-500 ring-offset-2"
                 : "text-gray-600 hover:bg-gray-50"
             )}
           >
             <span role="img" aria-label="previous" className="mr-1.5 text-xs">
               📜
             </span>
-            Recent ({lastResults.length})
+            Past ({lastResults.length})
           </TabsTrigger>
         </TabsList>
 

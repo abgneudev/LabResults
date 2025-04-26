@@ -84,6 +84,7 @@ export function PersonalizedTracking({ onClose }: PersonalizedTrackingProps) {
   >("categories");
   const [prompt, setPrompt] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [livePreview, setLivePreview] = useState({
     title: "",
     metrics: [] as string[],
@@ -92,6 +93,13 @@ export function PersonalizedTracking({ onClose }: PersonalizedTrackingProps) {
     unit: "mg/dL",
     status: "balanced" as "balanced" | "manage" | "consult" | "book",
   });
+
+  // Auto-focus the textarea when switching to the prompt step
+  useEffect(() => {
+    if (step === "prompt" && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [step]);
 
   // Generate live preview based on prompt input
   useEffect(() => {
@@ -367,6 +375,7 @@ export function PersonalizedTracking({ onClose }: PersonalizedTrackingProps) {
                     onChange={(e) => setPrompt(e.target.value)}
                     className="w-full border-[#E5F8FF] text-[#03659C] rounded-lg focus-visible:ring-[#03659C]"
                     rows={3}
+                    ref={textareaRef}
                   />
                 </div>
 

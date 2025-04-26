@@ -24,6 +24,7 @@ export function StatusIndicator({
       outlineColor: "border-teal-200 text-teal-700 bg-white",
       iconColor: "text-teal-500",
       emoji: "😊",
+      accessibleLabel: "Status: Balanced",
     },
     manage: {
       icon: AlertCircle,
@@ -32,6 +33,7 @@ export function StatusIndicator({
       outlineColor: "border-amber-200 text-amber-700 bg-white",
       iconColor: "text-amber-500",
       emoji: "🍎",
+      accessibleLabel: "Status: Needs management",
     },
     consult: {
       icon: Phone,
@@ -40,14 +42,16 @@ export function StatusIndicator({
       outlineColor: "border-red-200 text-red-600 bg-white",
       iconColor: "text-red-600",
       emoji: "📞",
+      accessibleLabel: "Status: Needs consultation",
     },
     book: {
       icon: () => <span className="text-lg">📅</span>,
-      text: "Schedule test",
+      text: "Schedule",
       color: "bg-blue-100 text-[#03659C] border-blue-200",
       outlineColor: "border-blue-200 text-[#03659C] bg-white",
       iconColor: "text-[#03659C]",
       emoji: "📅",
+      accessibleLabel: "Status: Schedule test",
     },
   };
 
@@ -71,6 +75,7 @@ export function StatusIndicator({
     color,
     iconColor,
     emoji,
+    accessibleLabel,
   } = statusConfig[status];
   const useOutline = status === "manage" || status === "consult";
   const styleColor = useOutline ? outlineColor : color;
@@ -78,20 +83,30 @@ export function StatusIndicator({
   if (!showText) {
     return (
       <div
-        className={cn("flex items-center justify-center", iconColor, className)}
+        className={cn(
+          "flex items-center justify-center rounded-full",
+          iconColor,
+          className
+        )}
+        aria-label={accessibleLabel}
+        role="status"
       >
         {status === "balanced" ? (
-          <span role="img" aria-label="Balanced">
+          <span role="img" aria-hidden="true">
             😊
           </span>
         ) : status === "manage" ? (
-          <span role="img" aria-label="Manage">
+          <span role="img" aria-hidden="true">
             🍎
           </span>
         ) : status === "consult" ? (
-          <Phone size={iconSizes[size]} className="stroke-[1.5px]" />
+          <Phone
+            size={iconSizes[size]}
+            className="stroke-[1.5px]"
+            aria-hidden="true"
+          />
         ) : (
-          <span className="text-base" role="img" aria-label="Book">
+          <span className="text-base" role="img" aria-hidden="true">
             📅
           </span>
         )}
@@ -105,15 +120,20 @@ export function StatusIndicator({
         "inline-flex items-center rounded-full font-medium border",
         styleColor,
         sizeClasses[size],
-        className
+        className,
+        // Added responsive adjustments for mobile
+        "sm:whitespace-nowrap",
+        size === "lg" ? "sm:text-base text-sm" : "" // Reduce text size on small screens for large indicators
       )}
+      role="status"
+      aria-label={accessibleLabel}
     >
       {status === "balanced" ? (
-        <span role="img" aria-label="Balanced" className="mr-1.5">
+        <span role="img" aria-hidden="true" className="mr-1.5">
           😊
         </span>
       ) : status === "manage" ? (
-        <span role="img" aria-label="Manage" className="mr-1.5">
+        <span role="img" aria-hidden="true" className="mr-1.5">
           🍎
         </span>
       ) : status === "consult" ? (
@@ -122,9 +142,10 @@ export function StatusIndicator({
             "mr-1.5 stroke-[1.5px]",
             size === "sm" ? "w-3 h-3" : size === "md" ? "w-4 h-4" : "w-5 h-5"
           )}
+          aria-hidden="true"
         />
       ) : (
-        <span className="mr-1.5" role="img" aria-label="Book">
+        <span className="mr-1.5" role="img" aria-hidden="true">
           📅
         </span>
       )}

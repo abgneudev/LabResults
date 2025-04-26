@@ -13,20 +13,33 @@ import Link from "next/link";
 
 interface VitalsDashboardProps {
   className?: string;
+  filterCategory?: string;
 }
 
-export function VitalsDashboard({ className }: VitalsDashboardProps) {
+export function VitalsDashboard({
+  className,
+  filterCategory,
+}: VitalsDashboardProps) {
   const { patientData, isLoading } = usePatient();
   const [showPersonalizedTracking, setShowPersonalizedTracking] =
     useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  // Filter metrics based on the category if provided
+  const filteredMetrics = filterCategory
+    ? patientData.metrics.filter((m) => m.category === filterCategory)
+    : patientData.metrics;
+
   // Get metrics that should be displayed in the vitals dashboard
-  const displayedMetrics = [
-    patientData.metrics.find((m) => m.id === "glucose"),
-    patientData.metrics.find((m) => m.id === "ldl"),
-    patientData.metrics.find((m) => m.id === "vitd"),
-  ].filter(Boolean);
+  // If a category filter is active, show all metrics in that category
+  // Otherwise show the default key metrics
+  const displayedMetrics = filterCategory
+    ? filteredMetrics
+    : [
+        patientData.metrics.find((m) => m.id === "glucose"),
+        patientData.metrics.find((m) => m.id === "ldl"),
+        patientData.metrics.find((m) => m.id === "vitd"),
+      ].filter(Boolean);
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -90,34 +103,61 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
     >
       {/* Header with Add Tracking button */}
       <div className="flex justify-between items-center mb-3">
-        <h2 className="text-lg font-medium text-[#03659C]">Vitals & More</h2>
+        <h2 className="text-lg font-medium text-[#03659C]">
+          {filterCategory
+            ? `${
+                filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)
+              } Metrics`
+            : "Vitals & More"}
+        </h2>
         <Button
           variant="outline"
           size={isMobile ? "sm" : "default"}
           className="text-[#03659C] border-[#03659C]/20"
           onClick={() => setShowPersonalizedTracking(true)}
+          aria-label="Add health tracking"
         >
-          <Plus className="h-4 w-4 mr-1" />
+          <Plus className="h-4 w-4 mr-1" aria-hidden="true" />
           Add Tracking
         </Button>
       </div>
 
       {isLoading ? (
         // Skeleton loading state
-        Array.from({ length: 3 }).map((_, i) => (
+        Array.from({ length: displayedMetrics.length || 3 }).map((_, i) => (
           <div key={i} className="mb-3">
             <Skeleton className="h-24 w-full" />
           </div>
         ))
+      ) : displayedMetrics.length === 0 ? (
+        // Empty state when no metrics match the filter
+        <div className="bg-[#E5F8FF] rounded-lg p-6 text-center">
+          <p className="text-[#03659C] mb-3">
+            No metrics found for this category.
+          </p>
+          <Button
+            onClick={() => setShowPersonalizedTracking(true)}
+            className="bg-[#03659C]"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add New Metric
+          </Button>
+        </div>
       ) : (
-        // Vitals card layout - keeping the original design
+        // Vitals card layout - keeping the original design with improved accessibility
         <div className="space-y-4">
           {displayedMetrics.map((metric) => (
             <div
               key={metric!.id}
-              className="bg-[#E5F8FF] rounded-lg relative overflow-hidden"
+              className="bg-[#E5F8FF] rounded-lg relative overflow-hidden border border-transparent hover:border-[#03659C]/10 transition-all"
             >
-              <Link href={`/results/${metric!.id}`} className="block p-4">
+              <Link
+                href={`/results/${metric!.id}`}
+                className="block p-4"
+                aria-label={`View details for ${metric!.name}: ${
+                  metric!.value
+                } ${metric!.unit}, status: ${metric!.status}`}
+              >
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex gap-x-1 items-center">
@@ -131,6 +171,8 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
                   </div>
                   <div>
                     <div
+                      role="status"
+                      aria-label={`Status: ${getStatusLabel(metric!.status)}`}
                       className={cn(
                         "px-3 py-1 rounded-full text-sm font-medium flex items-center justify-center w-[100px] h-[28px]",
                         metric!.status === "balanced"
@@ -140,11 +182,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
                           : "bg-white text-red-600"
                       )}
                     >
-                      <span
-                        className="mr-1.5"
-                        role="img"
-                        aria-label={metric!.status}
-                      >
+                      <span className="mr-1.5" role="img" aria-hidden="true">
                         {getStatusEmoji(metric!.status)}
                       </span>
                       {getStatusLabel(metric!.status)}
@@ -155,7 +193,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
                 <div className="flex justify-between items-end mt-2">
                   <div className="text-3xl font-bold text-[#03659C]">
                     {metric!.value}
-                    <span className="text-base font-normal ml-1">
+                    <span className="text-base font-medium ml-1">
                       {metric!.unit}
                     </span>
                   </div>
@@ -170,6 +208,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
                           ? "text-emerald-700"
                           : "text-red-600"
                       )}
+                      aria-label={`Trend: ${getTrendText(metric).text}`}
                     >
                       {getTrendText(metric).text}
                     </div>

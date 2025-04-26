@@ -29,6 +29,7 @@ import { ReferenceRangeChart } from "@/components/reference-range-chart";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { InterpretationCard } from "@/components/interpretation-card";
 import { ActionBar } from "@/components/action-bar";
+import { MedicalTerm } from "@/components/medical-term";
 
 export default function CategoryDetailPage() {
   const params = useParams();
@@ -297,6 +298,7 @@ export default function CategoryDetailPage() {
             </div>
 
             <div className="bg-white px-3 py-1.5 rounded-full text-sm text-[#03659C] font-medium">
+              <MedicalTerm term="reference range">Normal range:</MedicalTerm>{" "}
               {getNormalRange(metric.id)}
             </div>
           </div>
@@ -359,17 +361,27 @@ export default function CategoryDetailPage() {
                     </div>
                     <div className="flex-1">
                       <h5 className="text-sm font-medium text-gray-800">
-                        {metric.id === "glucose"
-                          ? "Balance your carbohydrate intake"
-                          : metric.id === "vitd"
-                          ? "Increase sun exposure and dietary vitamin D"
-                          : metric.id === "ldl"
-                          ? "Reduce saturated fat consumption"
-                          : metric.id === "bp"
-                          ? "Reduce sodium intake"
-                          : metric.id === "protein"
-                          ? "Stay properly hydrated"
-                          : "Optimize your nutrition"}
+                        {metric.id === "glucose" ? (
+                          <MedicalTerm term="glucose">
+                            Balance your carbohydrate intake
+                          </MedicalTerm>
+                        ) : metric.id === "vitd" ? (
+                          <MedicalTerm term="vitamin D">
+                            Increase sun exposure and dietary vitamin D
+                          </MedicalTerm>
+                        ) : metric.id === "ldl" ? (
+                          <MedicalTerm term="LDL">
+                            Reduce saturated fat consumption
+                          </MedicalTerm>
+                        ) : metric.id === "bp" ? (
+                          <MedicalTerm term="hypertension">
+                            Reduce sodium intake
+                          </MedicalTerm>
+                        ) : metric.id === "protein" ? (
+                          "Stay properly hydrated"
+                        ) : (
+                          "Optimize your nutrition"
+                        )}
                       </h5>
                       <p className="text-xs text-gray-600 mt-1">
                         {metric.id === "glucose"
@@ -523,6 +535,26 @@ export default function CategoryDetailPage() {
                         Lifestyle factors that affect {metric.name}
                       </a>
                     </li>
+                    {metric.id === "glucose" && (
+                      <li className="flex items-center">
+                        <FileText className="h-4 w-4 mr-2 text-[#03659C]" />
+                        <a href="#" className="hover:underline">
+                          <MedicalTerm term="metabolism">
+                            How metabolism affects blood sugar
+                          </MedicalTerm>
+                        </a>
+                      </li>
+                    )}
+                    {metric.id === "ldl" && (
+                      <li className="flex items-center">
+                        <FileText className="h-4 w-4 mr-2 text-[#03659C]" />
+                        <a href="#" className="hover:underline">
+                          <MedicalTerm term="lipid panel">
+                            Understanding your lipid panel
+                          </MedicalTerm>
+                        </a>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </AccordionContent>
