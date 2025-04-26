@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -35,18 +35,33 @@ export default function CategoryDetailPage() {
   const params = useParams();
   const { patientData, isLoading } = usePatient();
   const [expanded, setExpanded] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Use useEffect to handle client-side initialization
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Only access params after component is mounted on client
+  const categoryId = typeof params.category === "string" ? params.category : "";
 
   // Find the metric that matches the category param
-  const metric = patientData.metrics.find((m) => m.id === params.category);
+  const metric = mounted
+    ? patientData.metrics.find((m) => m.id === categoryId)
+    : null;
 
   // Find index of current metric for navigation
-  const currentIndex = patientData.metrics.findIndex(
-    (m) => m.id === params.category
-  );
+  const currentIndex = mounted
+    ? patientData.metrics.findIndex((m) => m.id === categoryId)
+    : -1;
+
   const prevMetric =
-    currentIndex > 0 ? patientData.metrics[currentIndex - 1] : null;
+    mounted && currentIndex > 0
+      ? patientData.metrics[currentIndex - 1]
+      : null;
+
   const nextMetric =
-    currentIndex < patientData.metrics.length - 1
+    mounted && currentIndex < patientData.metrics.length - 1
       ? patientData.metrics[currentIndex + 1]
       : null;
 

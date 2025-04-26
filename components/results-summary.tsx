@@ -150,7 +150,8 @@ export function ResultsSummary({
             value="new"
             className={cn(
               "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
-              activeTab === "new" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
+              activeTab === "new" &&
+                "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="new" className="mr-1.5 text-xs">
@@ -163,7 +164,8 @@ export function ResultsSummary({
             value="upcoming"
             className={cn(
               "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
-              activeTab === "upcoming" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
+              activeTab === "upcoming" &&
+                "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="upcoming" className="mr-1.5 text-xs">
@@ -176,7 +178,8 @@ export function ResultsSummary({
             value="last"
             className={cn(
               "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
-              activeTab === "last" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
+              activeTab === "last" &&
+                "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="previous" className="mr-1.5 text-xs">

@@ -145,15 +145,23 @@ export default function BookTestPage() {
 
   // Use the built-in searchParams hook from next/navigation for client-side
   useEffect(() => {
+    // Get type directly from URL to avoid any potential caching issues
     const typeParam = searchParams.get("type");
-
+    
     if (typeParam) {
+      console.log(`Selected test type from URL: ${typeParam}`);
       setTestType(typeParam);
       setSelectedCard(typeParam);
+      
+      // Auto-select lab if none selected
+      if (!lab) {
+        setLab("labcorp");
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, lab]);
 
   const handleTestSelect = (testId: string) => {
+    console.log(`Test selected manually: ${testId}`);
     setSelectedCard(testId);
     setTestType(testId);
   };
@@ -190,6 +198,9 @@ export default function BookTestPage() {
   return (
     <div>
       <TopBar title="Book a Test" />
+
+      {/* Invisible debug component to help diagnose navigation issues */}
+      <div className="hidden">Navigation debug: test type = {testType}, selected card = {selectedCard}</div>
 
       <div className="p-4">
         <h1 className="text-xl font-semibold mb-6">Schedule a Lab Test</h1>

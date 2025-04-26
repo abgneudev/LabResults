@@ -275,7 +275,11 @@ export default function ResultsPage() {
 
           <div className="space-y-3">
             {/* Blood Panel Card */}
-            <Link href="/book-test?type=blood" className="block">
+            <Link 
+              href="/book-test?type=blood" 
+              prefetch={true}
+              className="block" 
+            >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
                 <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
                   <Droplet size={20} className="text-[#03659C]" />
@@ -305,7 +309,13 @@ export default function ResultsPage() {
             </Link>
 
             {/* Cholesterol Card */}
-            <Link href="/book-test?type=lipids" className="block">
+            <Link
+              href="/book-test?type=lipids"
+              className="block"
+              prefetch={true}
+              replace={false}
+              shallow={false}
+            >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
                 <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
                   <Heart size={20} className="text-[#03659C]" />
@@ -335,7 +345,13 @@ export default function ResultsPage() {
             </Link>
 
             {/* Vitamin Panel Card */}
-            <Link href="/book-test?type=vitamin" className="block">
+            <Link
+              href="/book-test?type=vitamin"
+              className="block"
+              prefetch={true}
+              replace={false}
+              shallow={false}
+            >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
                 <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
                   <Sun size={20} className="text-[#03659C]" />
@@ -365,7 +381,13 @@ export default function ResultsPage() {
             </Link>
 
             {/* Thyroid Function Card */}
-            <Link href="/book-test?type=thyroid" className="block">
+            <Link
+              href="/book-test?type=thyroid"
+              className="block"
+              prefetch={true}
+              replace={false}
+              shallow={false}
+            >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
                 <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
                   <Activity size={20} className="text-[#03659C]" />
@@ -395,7 +417,11 @@ export default function ResultsPage() {
             </Link>
 
             {/* A1C Test Card */}
-            <Link href="/book-test?type=a1c" className="block">
+            <Link
+              href="/book-test?type=a1c"
+              className="block"
+              prefetch={true}
+            >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
                 <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
                   <ActivitySquare size={20} className="text-[#03659C]" />
@@ -418,36 +444,6 @@ export default function ResultsPage() {
                   <div className="flex items-center mt-2">
                     <span className="inline-block px-2 py-0.5 bg-blue-50 text-[#03659C] rounded text-xs">
                       Covered by insurance
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Comprehensive Panel Card */}
-            <Link href="/book-test?type=comprehensive" className="block">
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
-                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
-                  <ClipboardCheck size={20} className="text-[#03659C]" />
-                </div>
-                <div className="ml-4 flex-1">
-                  <div className="flex justify-between items-start">
-                    <div className="text-sm font-semibold text-[#03659C]">
-                      Comprehensive
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-sm font-medium text-[#03659C]">
-                        Included
-                      </span>
-                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
-                    Complete health assessment with all major panels
-                  </p>
-                  <div className="flex items-center mt-2">
-                    <span className="inline-block px-2 py-0.5 bg-green-50 text-green-600 rounded text-xs">
-                      Included in your plan
                     </span>
                   </div>
                 </div>
