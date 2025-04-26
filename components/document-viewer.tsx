@@ -810,8 +810,8 @@ export function DocumentViewer() {
 
   return (
     <div className="bg-white rounded-lg border border-[#E5F8FF] overflow-hidden">
-      <div className="p-4">
-        <div className="relative mb-5">
+      <div className="p-2">
+        <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#03659C] h-5 w-5" />
           <Input
             placeholder="Search lab reports or test names..."
