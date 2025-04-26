@@ -49,6 +49,16 @@ export function LabReportsCard({ reportCount }: LabReportsCardProps) {
           </Button>
         </Link>
       </div>
+
+      <div className="mt-4 text-right">
+        <Link
+          href="/reports"
+          className="text-[#1a73e8] font-medium text-sm hover:underline flex items-center justify-end"
+        >
+          View all Reports
+          <ChevronRight className="h-4 w-4 ml-0.5" />
+        </Link>
+      </div>
     </motion.div>
   );
 }

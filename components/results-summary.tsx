@@ -145,50 +145,53 @@ export function ResultsSummary({
         onValueChange={setActiveTab}
         value={activeTab}
       >
-        <TabsList className="gap-2 text-sm md:text-base font-medium bg-white p-1.5 rounded-full border border-gray-100 mb-4">
+        <TabsList className="w-full grid grid-cols-3 gap-1 text-sm bg-white p-1 rounded-full border border-gray-100 shadow-sm">
           <TabsTrigger
             value="new"
             className={cn(
-              "rounded-full px-3.5 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2",
+              (className =
+                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
               activeTab === "new"
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "hover:bg-gray-50"
+                ? "bg-blue-500 text-white font-medium"
+                : "text-gray-600 hover:bg-gray-50"
             )}
           >
-            <span role="img" aria-label="new" className="mr-1.5">
+            <span role="img" aria-label="new" className="mr-1.5 text-xs">
               🆕
             </span>
             New ({newResults.length})
           </TabsTrigger>
 
           <TabsTrigger
-            value="last"
-            className={cn(
-              "rounded-full px-3.5 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2",
-              activeTab === "last"
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "hover:bg-gray-50"
-            )}
-          >
-            <span role="img" aria-label="previous" className="mr-1.5">
-              📜
-            </span>
-            Recent ({lastResults.length})
-          </TabsTrigger>
-
-          <TabsTrigger
             value="upcoming"
             className={cn(
-              "rounded-full px-3.5 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2",
+              (className =
+                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
               activeTab === "upcoming"
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "hover:bg-gray-50"
+                ? (className = "bg-[#03659C] text-white font-medium")
+                : "text-gray-600 hover:bg-gray-50"
             )}
           >
-            <span role="img" aria-label="upcoming" className="mr-1.5">
+            <span role="img" aria-label="upcoming" className="mr-1.5 text-xs">
               🔜
             </span>
             Upcoming ({upcomingResults.length})
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="last"
+            className={cn(
+              (className =
+                "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2"),
+              activeTab === "last"
+                ? "bg-blue-500 text-white font-medium"
+                : "text-gray-600 hover:bg-gray-50"
+            )}
+          >
+            <span role="img" aria-label="previous" className="mr-1.5 text-xs">
+              📜
+            </span>
+            Recent ({lastResults.length})
           </TabsTrigger>
         </TabsList>
 
@@ -210,8 +213,9 @@ export function ResultsSummary({
                       total={newResults.length}
                     />
 
-                    {/* Slider navigation */}
-                    <div className="flex justify-center items-center mt-4 mb-4">
+                    {/* Slider navigation with page indicator */}
+                    <div className="flex justify-between items-center mt-4 mb-4">
+                      <div className="w-24"></div> {/* Spacer */}
                       <div className="flex gap-3">
                         {newResults.map((_, index) => (
                           <button
@@ -227,11 +231,12 @@ export function ResultsSummary({
                           />
                         ))}
                       </div>
+                      <div className="w-24 text-right"></div>
                     </div>
 
                     {/* Full-width CTA */}
                     <Link
-                      href="/results"
+                      href="/reports"
                       className="block w-full text-center py-3.5 px-4 bg-[#03659C] text-white rounded-md font-medium mt-3 text-sm flex items-center justify-center"
                     >
                       View all reports

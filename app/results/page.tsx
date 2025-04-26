@@ -17,12 +17,8 @@ import { usePatient } from "@/context/patient-context";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReferenceRangeChart } from "@/components/reference-range-chart";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { PersonalizedTracking } from "@/components/personalized-tracking";
-import { DocumentViewer } from "@/components/document-viewer";
-import { VitalsDashboard } from "@/components/vitals-dashboard";
 import { HeroSection } from "@/components/hero-section";
 import { ResultsSummary } from "@/components/results-summary";
 import { UploadLabsCta } from "@/components/upload-labs-cta";
@@ -126,7 +122,6 @@ export default function ResultsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const [activeTab, setActiveTab] = useState("timeline");
   const [showPersonalizedTracking, setShowPersonalizedTracking] =
     useState(false);
 
@@ -355,96 +350,7 @@ export default function ResultsPage() {
         <UploadLabsCta />
       </div>
 
-      {/* Content Tabs */}
-      <div className="px-5 max-w-[640px] mx-auto mt-6">
-        <Tabs
-          defaultValue="timeline"
-          className="mb-6"
-          onValueChange={setActiveTab}
-        >
-          <TabsList className="grid grid-cols-2 mb-4">
-            <TabsTrigger value="timeline" className="text-[#03659C]">
-              Timeline View
-            </TabsTrigger>
-            <TabsTrigger value="documents" className="text-[#03659C]">
-              Document View
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="timeline">
-            {/* Test Results Hero Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-[#E5F8FF] rounded-lg p-5 mb-6"
-            >
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-medium text-[#03659C]">
-                  Blood Glucose
-                </h2>
-                <span className="text-xs text-[#03659C] bg-white px-2 py-1 rounded-full">
-                  Apr 15, 2023
-                </span>
-              </div>
-
-              {isLoading ? (
-                <Skeleton className="h-48 w-full" />
-              ) : (
-                <div className="mb-4">
-                  <ReferenceRangeChart
-                    data={chartData}
-                    status="balanced"
-                    unit="mg/dL"
-                    name="Blood Glucose"
-                    ranges={[
-                      {
-                        min: 0,
-                        max: 70,
-                        label: "Low",
-                        color: "rgba(239, 68, 68, 0.2)",
-                      },
-                      {
-                        min: 70,
-                        max: 99,
-                        label: "Normal",
-                        color: "rgba(20, 184, 166, 0.2)",
-                      },
-                      {
-                        min: 99,
-                        max: 125,
-                        label: "Pre-diabetic",
-                        color: "rgba(245, 158, 11, 0.2)",
-                      },
-                      {
-                        min: 125,
-                        max: 200,
-                        label: "Diabetic",
-                        color: "rgba(239, 68, 68, 0.2)",
-                      },
-                    ]}
-                  />
-                </div>
-              )}
-
-              <Button
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2 text-[#03659C] border-[#03659C]/20 hover:bg-white/50 opacity-80"
-              >
-                View Full Report
-              </Button>
-            </motion.div>
-
-            {/* Vitals & More Section - Using our new VitalsDashboard component */}
-            <VitalsDashboard className="mb-6" />
-          </TabsContent>
-
-          <TabsContent value="documents">
-            <DocumentViewer />
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {/* Personalized Tracking Modal is now handled by VitalsDashboard */}
+      {/* Personalized Tracking Modal */}
       {showPersonalizedTracking && (
         <PersonalizedTracking
           onClose={() => setShowPersonalizedTracking(false)}

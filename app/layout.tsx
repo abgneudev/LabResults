@@ -5,6 +5,7 @@ import "./globals.css";
 import { PatientProvider } from "@/context/patient-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { StickyMenu } from "@/components/sticky-menu";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -32,9 +33,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <PatientProvider>
-            <main className="min-h-screen max-w-md mx-auto bg-[#FAFEFF]">
+            <main className="min-h-screen max-w-md mx-auto bg-[#FAFEFF] pb-20">
               {children}
             </main>
+            <StickyMenu />
             <Toaster />
           </PatientProvider>
         </ThemeProvider>

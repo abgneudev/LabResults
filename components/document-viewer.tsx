@@ -491,7 +491,7 @@ export function DocumentViewer() {
     [key: string]: boolean;
   }>({});
   const [viewMode, setViewMode] = useState<"date" | "category">("date");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
 
   // Function to get user's common test categories based on test history
   const getUserTestCategories = () => {
@@ -550,9 +550,26 @@ export function DocumentViewer() {
     }
   };
 
-  // Handle category filter click
+  // Handle category filter click - toggle selection
   const handleCategoryFilter = (category: string) => {
-    setActiveCategory(activeCategory === category ? null : category);
+    setActiveCategories((prev) => {
+      if (prev.includes(category)) {
+        return prev.filter((cat) => cat !== category);
+      } else {
+        return [...prev, category];
+      }
+    });
+  };
+
+  // Handle clearing a single category
+  const handleCategoryClear = (category: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveCategories((prev) => prev.filter((cat) => cat !== category));
+  };
+
+  // Clear all categories
+  const clearAllCategories = () => {
+    setActiveCategories([]);
   };
 
   const toggleResultExplanation = (reportId: string, resultIndex: number) => {
@@ -725,9 +742,9 @@ export function DocumentViewer() {
     });
   }
 
-  if (activeCategory) {
-    filteredReports = filteredReports.filter(
-      (report) => report.type === activeCategory
+  if (activeCategories.length > 0) {
+    filteredReports = filteredReports.filter((report) =>
+      activeCategories.includes(report.type)
     );
   }
 
@@ -793,65 +810,68 @@ export function DocumentViewer() {
 
   return (
     <div className="bg-white rounded-lg border border-[#E5F8FF] overflow-hidden">
-      <div className="p-4 border-b border-[#E5F8FF]">
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#03659C]/60 h-4 w-4" />
+      <div className="p-4">
+        <div className="relative mb-5">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#03659C] h-5 w-5" />
           <Input
             placeholder="Search lab reports or test names..."
-            className="pl-9 bg-[#FAFEFF] border-[#E5F8FF] text-[#03659C] placeholder:text-[#03659C]/60"
+            className="pl-10 py-6 bg-white border-2 border-[#03659C] text-[#03659C] placeholder:text-[#03659C]/80 shadow-sm focus:border-[#03659C] focus:ring-1 focus:ring-[#03659C]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-          <div className="flex justify-between w-full">
-            <div className="flex items-center justify-end">
+        <div className="space-y-3">
+          {/* Top row: Dropdown menu and sort order */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-[#03659C]/70">
               <SmartFilter onFilterChange={handleFilterChange} />
-
-              <span className="text-xs text-[#03659C]/70 ml-2">
-                {filters.sortOrder === "newest"
-                  ? "Sorted by newest"
-                  : "Sorted by oldest"}
-              </span>
             </div>
+            <span className="text-xs text-[#03659C]/60">
+              {filters.sortOrder === "newest"
+                ? "Sorted by newest"
+                : "Sorted by oldest"}
+            </span>
           </div>
-        </div>
-      </div>
 
-      <div className="px-4 py-2 bg-[#FAFEFF]/60 border-b border-[#E5F8FF]">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-medium text-[#03659C]/70 mb-2">
-            Filter by Category
-          </h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-xs text-[#03659C]/70 hover:bg-transparent hover:text-[#03659C]"
-            onClick={() => setActiveCategory(null)}
-          >
-            <X className="h-3.5 w-3.5 mr-0" />
-            clear filters
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {userCategories.map((category) => (
-            <Button
-              key={category}
-              variant="outline"
-              size="sm"
-              className={cn(
-                "text-[10px] border-[#03659C]/20 hover:bg-[#E5F8FF] py-0 px-2",
-                activeCategory === category && "bg-[#E5F8FF]"
-              )}
-              onClick={() => handleCategoryFilter(category)}
-            >
-              {getCategoryFilterIcon(category)}
-              <span className="ml-1 truncate max-w-[100px]">
-                {getCategoryDisplayName(category)}
-              </span>
-            </Button>
-          ))}
+          {/* Category filters in horizontal scrollable row */}
+          <div className="flex items-center overflow-x-auto pb-2 scrollbar-hide gap-2">
+            {userCategories.map((category) => (
+              <Button
+                key={category}
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "text-[11px] py-0 px-3 whitespace-nowrap flex-shrink-0 transition-colors duration-400",
+                  activeCategories.includes(category)
+                    ? "bg-[#E5F8FF] text-[#03659C]"
+                    : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                )}
+                onClick={() => handleCategoryFilter(category)}
+              >
+                {activeCategories.includes(category) && (
+                  <X
+                    className="h-3 w-3 mr-1 cursor-pointer"
+                    onClick={(e) => handleCategoryClear(category, e)}
+                  />
+                )}
+                {getCategoryFilterIcon(category)}
+                <span className="ml-1 truncate max-w-[100px]">
+                  {getCategoryDisplayName(category)}
+                </span>
+              </Button>
+            ))}
+            {activeCategories.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[11px] py-0 px-3 whitespace-nowrap flex-shrink-0 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                onClick={clearAllCategories}
+              >
+                Clear All
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -859,8 +879,8 @@ export function DocumentViewer() {
         {groupedReports.length > 0 ? (
           <div>
             {groupedReports.map((group) => (
-              <div key={group.key} className="border-b border-[#E5F8FF]">
-                <div className="px-4 py-2 bg-[#FAFEFF]/80">
+              <div key={group.key}>
+                <div className="px-4 py-2 bg-[#E5F8FF]">
                   <h3 className="text-sm font-medium text-[#03659C]">
                     {group.title}
                   </h3>
@@ -950,51 +970,87 @@ export function DocumentViewer() {
                           className="px-4 pb-4"
                         >
                           <div className="bg-[#FAFEFF] p-3 rounded-lg mb-3">
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2 py-3">
                               <span className="text-sm font-medium text-[#03659C]">
                                 Patient ID: {report.patientId}
                               </span>
-                              <span className="text-xs bg-[#E5F8FF] pl-2 pr-3 py-1rounded-full text-[#03659C]">
+                              <span className="text-xs bg-[#E5F8FF] pl-2 pr-3 py-1 rounded-full text-[#03659C]">
                                 Insurance: {report.insurance}
                               </span>
                             </div>
                             <div className="text-xs text-[#03659C]/70 grid grid-cols-1 sm:grid-cols-3 gap-1">
-                              <p>Technician: {report.technician}</p>
-                              <p>Ordered by: Dr. {report.doctor}</p>
-                              <p>
-                                Collection time:{" "}
-                                {format(new Date(report.date), "h:mm a")}
-                              </p>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] text-[#03659C]/80">
+                                  Technician
+                                </span>
+                                <span className="font-medium text-slate-800">
+                                  {report.technician}
+                                </span>
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] text-[#03659C]/80">
+                                  Ordered by
+                                </span>
+                                <span className="font-medium text-slate-800">
+                                  Dr. {report.doctor}
+                                </span>
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] text-[#03659C]/80">
+                                  Collection time
+                                </span>
+                                <span className="font-medium text-slate-800">
+                                  {format(new Date(report.date), "h:mm a")}
+                                </span>
+                              </div>
                             </div>
                           </div>
 
-                          <div className="bg-[#E5F8FF] p-3 rounded-lg mb-3 text-xs text-[#03659C]">
-                            <p className="font-medium">
+                          <div className="bg-[#E5F8FF] p-4 rounded-lg mb-3 text-xs text-[#03659C]">
+                            <p className="font-medium flex items-center">
+                              <span className="mr-2 pb-2 text-base">🔍</span>
                               Understanding your results:
                             </p>
-                            <p>
+                            <p className="ml-7 pb-2">
                               Results outside the reference range may need
                               attention. Discuss with your healthcare provider.
                             </p>
+                            {report.results.some(
+                              (r) => r.status !== "normal"
+                            ) && (
+                              <div className="mt-2 pt-4 border-t border-[#03659C]/20">
+                                <p className="font-medium flex items-center">
+                                  <span className="mr-2 text-base">⚠️</span>
+                                  This report contains{" "}
+                                  {
+                                    report.results.filter(
+                                      (r) => r.status !== "normal"
+                                    ).length
+                                  }{" "}
+                                  result(s) that fall outside the reference
+                                  range.
+                                </p>
+                                <p className="ml-7 mt-1 italic">
+                                  <span className="mr-1 text-base">👆</span>
+                                  Click each abnormal result for more
+                                  information.
+                                </p>
+                              </div>
+                            )}
                           </div>
 
                           <div className="bg-white rounded-lg border border-[#E5F8FF] overflow-hidden">
                             <div className="grid grid-cols-12 gap-2 p-3 border-b border-[#E5F8FF] bg-[#FAFEFF] text-xs font-medium text-[#03659C]">
                               <div className="col-span-4 px-2">Test</div>
-                              <div className="col-span-2 text-right px-2">
+                              <div className="col-span-3 text-right px-2">
                                 Result
                               </div>
-                              <div className="col-span-2 text-right px-2">
+                              <div className="col-span-3 text-right px-2">
                                 Range
                               </div>
                               <div className="col-span-2 text-right px-2">
                                 Status
                               </div>
-                              {filters.showProgress && (
-                                <div className="col-span-2 text-right px-2">
-                                  Trend
-                                </div>
-                              )}
                             </div>
 
                             {report.results.map((result, index) => {
@@ -1031,13 +1087,13 @@ export function DocumentViewer() {
                                         </SimpleTooltip>
                                       )}
                                     </div>
-                                    <div className="col-span-2 text-right font-medium px-2">
+                                    <div className="col-span-3 text-right font-bold px-2">
                                       {result.value}{" "}
                                       <span className="font-normal text-[#03659C]/80">
                                         {result.unit}
                                       </span>
                                     </div>
-                                    <div className="col-span-2 text-right text-[#03659C]/70 px-2">
+                                    <div className="col-span-3 text-right text-[#03659C]/70 px-2">
                                       {result.reference}
                                     </div>
                                     <div className="col-span-2 text-right px-2">
@@ -1058,36 +1114,6 @@ export function DocumentViewer() {
                                         </span>
                                       )}
                                     </div>
-                                    {filters.showProgress && (
-                                      <div className="col-span-2 text-right px-2">
-                                        {result.previousValue ? (
-                                          <div className="flex justify-end items-center">
-                                            <TrendIndicator
-                                              currentValue={result.value}
-                                              previousValue={
-                                                result.previousValue
-                                              }
-                                              unit={result.unit}
-                                              normalRange={normalRange}
-                                            />
-                                            <SimpleTooltip
-                                              content={`Previous test: ${format(
-                                                new Date(result.previousDate),
-                                                "MMM d, yyyy"
-                                              )}`}
-                                              side="left"
-                                              className="text-xs"
-                                            >
-                                              <Calendar className="h-3 w-3 ml-1 text-[#03659C]/40" />
-                                            </SimpleTooltip>
-                                          </div>
-                                        ) : (
-                                          <span className="text-[#03659C]/40">
-                                            No history
-                                          </span>
-                                        )}
-                                      </div>
-                                    )}
                                   </div>
 
                                   {result.status !== "normal" &&
@@ -1114,34 +1140,6 @@ export function DocumentViewer() {
                               );
                             })}
                           </div>
-
-                          {report.results.some(
-                            (r) => r.status !== "normal"
-                          ) && (
-                            <div className="mt-3 mb-3 p-3 rounded-lg border border-amber-100 bg-amber-50/30">
-                              <h4 className="text-sm font-medium flex items-center text-amber-800 mb-2">
-                                <AlertTriangle className="h-4 w-4 mr-1.5" />
-                                Important Results Summary
-                              </h4>
-                              <p className="text-xs text-amber-800 mb-2">
-                                This report contains{" "}
-                                {
-                                  report.results.filter(
-                                    (r) => r.status !== "normal"
-                                  ).length
-                                }{" "}
-                                result(s) that fall outside the reference range.
-                                Click each abnormal result for more information.
-                              </p>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="bg-white border-amber-200 text-amber-800 hover:bg-amber-50 text-xs"
-                              >
-                                Schedule Follow-up
-                              </Button>
-                            </div>
-                          )}
 
                           <div className="flex flex-wrap justify-end mt-3 gap-2">
                             <SimpleTooltip
