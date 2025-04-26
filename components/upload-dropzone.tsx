@@ -1,66 +1,68 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { Upload, FileText, Check, AlertCircle } from "lucide-react"
-import { useToast } from "@/components/ui/use-toast"
-import { usePatient } from "@/context/patient-context"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Upload, FileText, Check, AlertCircle } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/context/patient-context";
+import { Button } from "@/components/ui/button";
 
 export function UploadDropzone() {
-  const [isDragging, setIsDragging] = useState(false)
-  const [isUploading, setIsUploading] = useState(false)
-  const [file, setFile] = useState<File | null>(null)
-  const [uploadStatus, setUploadStatus] = useState<"idle" | "success" | "error">("idle")
-  const { toast } = useToast()
-  const router = useRouter()
-  const { addReport } = usePatient()
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const { toast } = useToast();
+  const router = useRouter();
+  const { addReport } = usePatient();
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
   const handleDragLeave = () => {
-    setIsDragging(false)
-  }
+    setIsDragging(false);
+  };
 
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
+    e.preventDefault();
+    setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const droppedFile = e.dataTransfer.files[0]
+      const droppedFile = e.dataTransfer.files[0];
       if (droppedFile.type === "application/pdf") {
-        setFile(droppedFile)
+        setFile(droppedFile);
       } else {
         toast({
           title: "Invalid file type",
           description: "Please upload a PDF file",
           variant: "destructive",
-        })
+        });
       }
     }
-  }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0])
+      setFile(e.target.files[0]);
     }
-  }
+  };
 
   const handleUpload = async () => {
-    if (!file) return
+    if (!file) return;
 
-    setIsUploading(true)
+    setIsUploading(true);
 
     try {
       // Mock API call to parse the PDF
       // In a real app, this would send the file to the server
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Mock successful parsing
       const mockParsedData = {
@@ -78,31 +80,31 @@ export function UploadDropzone() {
             lastUpdated: new Date().toISOString(),
           },
         ],
-      }
+      };
 
-      addReport(mockParsedData)
-      setUploadStatus("success")
+      addReport(mockParsedData);
+      setUploadStatus("success");
 
       toast({
         title: "Upload successful",
         description: "Your lab results have been processed",
-      })
+      });
 
       // Redirect to results page after a short delay
       setTimeout(() => {
-        router.push("/results")
-      }, 1500)
+        router.push("/results");
+      }, 1500);
     } catch (error) {
-      setUploadStatus("error")
+      setUploadStatus("error");
       toast({
         title: "Upload failed",
         description: "There was an error processing your file",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
     }
-  }
+  };
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -122,7 +124,9 @@ export function UploadDropzone() {
               <Upload className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-medium mb-2">Upload Lab Results</h3>
-            <p className="text-sm text-gray-500 mb-4">Drag and drop your PDF file here, or click to select</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Drag and drop your PDF file here, or click to select
+            </p>
             <input
               type="file"
               id="file-upload"
@@ -131,7 +135,12 @@ export function UploadDropzone() {
               onChange={handleFileChange}
             />
             <label htmlFor="file-upload">
-              <Button variant="outline" className="cursor-pointer" disabled={isUploading} type="button">
+              <Button
+                variant="outline"
+                className="cursor-pointer"
+                disabled={isUploading}
+                type="button"
+              >
                 Select PDF
               </Button>
             </label>
@@ -142,7 +151,9 @@ export function UploadDropzone() {
               <Check className="h-6 w-6 text-green-600" />
             </div>
             <h3 className="text-lg font-medium mb-2">Upload Complete</h3>
-            <p className="text-sm text-gray-500">Your lab results have been processed</p>
+            <p className="text-sm text-gray-500">
+              Your lab results have been processed
+            </p>
           </div>
         ) : (
           <div className="text-center">
@@ -150,8 +161,14 @@ export function UploadDropzone() {
               <AlertCircle className="h-6 w-6 text-red-600" />
             </div>
             <h3 className="text-lg font-medium mb-2">Upload Failed</h3>
-            <p className="text-sm text-gray-500 mb-4">There was an error processing your file</p>
-            <Button variant="outline" onClick={() => setUploadStatus("idle")} type="button">
+            <p className="text-sm text-gray-500 mb-4">
+              There was an error processing your file
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => setUploadStatus("idle")}
+              type="button"
+            >
               Try Again
             </Button>
           </div>
@@ -162,13 +179,20 @@ export function UploadDropzone() {
         <div className="mt-4">
           <div className="flex items-center p-3 bg-gray-50 rounded-lg">
             <FileText className="h-5 w-5 text-gray-500 mr-2" />
-            <span className="text-sm font-medium truncate flex-1">{file.name}</span>
-            <Button onClick={handleUpload} disabled={isUploading} className="ml-2" type="button">
+            <span className="text-sm font-medium truncate flex-1">
+              {file.name}
+            </span>
+            <Button
+              onClick={handleUpload}
+              disabled={isUploading}
+              className="ml-2"
+              type="button"
+            >
               {isUploading ? "Processing..." : "Upload"}
             </Button>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

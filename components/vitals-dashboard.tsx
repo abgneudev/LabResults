@@ -35,7 +35,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
       case "manage":
         return "Manage";
       case "consult":
-        return "Consult";
+        return "Review";
       case "book":
         return "Book";
       default:
@@ -50,7 +50,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
       case "manage":
         return "🍎";
       case "consult":
-        return "📞";
+        return "🔍";
       case "book":
         return "📅";
       default:
@@ -132,7 +132,7 @@ export function VitalsDashboard({ className }: VitalsDashboardProps) {
                   <div>
                     <div
                       className={cn(
-                        "px-3 py-1 rounded-full text-sm font-medium flex items-center",
+                        "px-3 py-1 rounded-full text-sm font-medium flex items-center justify-center w-[100px] h-[28px]",
                         metric!.status === "balanced"
                           ? "bg-emerald-600 text-white"
                           : metric!.status === "manage"

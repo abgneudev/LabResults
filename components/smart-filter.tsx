@@ -35,7 +35,7 @@ interface SmartFilterProps {
 export function SmartFilter({ onFilterChange, className }: SmartFilterProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [showProgress, setShowProgress] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<string>("recent-abnormal");
+  const [activeFilter, setActiveFilter] = useState<string>("recent");
   const [dateRange, setDateRange] = useState<string>("all");
 
   const toggleSortOrder = () => {
@@ -106,20 +106,20 @@ export function SmartFilter({ onFilterChange, className }: SmartFilterProps) {
             <DropdownMenuItem
               className={cn(
                 "flex items-center transition-colors",
-                activeFilter === "recent-abnormal"
+                activeFilter === "recent"
                   ? "bg-[#E5F8FF] font-medium"
                   : "hover:bg-[#FAFEFF]"
               )}
-              onClick={() => handleFilterChange("recent-abnormal")}
+              onClick={() => handleFilterChange("recent")}
             >
-              <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
+              <Clock className="h-4 w-4 mr-2 text-[#03659C]" />
               <div className="flex flex-col">
-                <span>Abnormal results</span>
+                <span>All results</span>
                 <span className="text-xs text-[#03659C]/60">
-                  Show reports with abnormal values
+                  Show all reports by date
                 </span>
               </div>
-              {activeFilter === "recent-abnormal" && (
+              {activeFilter === "recent" && (
                 <CheckCircle className="h-3 w-3 ml-auto text-[#03659C]" />
               )}
             </DropdownMenuItem>
@@ -148,20 +148,20 @@ export function SmartFilter({ onFilterChange, className }: SmartFilterProps) {
             <DropdownMenuItem
               className={cn(
                 "flex items-center transition-colors",
-                activeFilter === "recent"
+                activeFilter === "recent-abnormal"
                   ? "bg-[#E5F8FF] font-medium"
                   : "hover:bg-[#FAFEFF]"
               )}
-              onClick={() => handleFilterChange("recent")}
+              onClick={() => handleFilterChange("recent-abnormal")}
             >
-              <Clock className="h-4 w-4 mr-2 text-[#03659C]" />
+              <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
               <div className="flex flex-col">
-                <span>All results</span>
+                <span>Abnormal results</span>
                 <span className="text-xs text-[#03659C]/60">
-                  Show all reports by date
+                  Show reports with abnormal values
                 </span>
               </div>
-              {activeFilter === "recent" && (
+              {activeFilter === "recent-abnormal" && (
                 <CheckCircle className="h-3 w-3 ml-auto text-[#03659C]" />
               )}
             </DropdownMenuItem>

@@ -1,254 +1,191 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { TopBar } from "@/components/top-bar"
-import { UploadCloud, FileText, Check, AlertCircle, FileType, Info } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
-import { usePatient } from "@/context/patient-context"
-import { DisclaimerBanner } from "@/components/disclaimer-banner"
+import { useState } from "react";
+import { TopBar } from "@/components/top-bar";
+import { Upload, Info, FileUp, CheckCircle } from "lucide-react";
+import { DisclaimerBanner } from "@/components/disclaimer-banner";
+
+interface UploadedFile {
+  name: string;
+  size: number;
+  url: string;
+}
 
 export default function UploadPage() {
-  const [isDragging, setIsDragging] = useState(false)
-  const [isUploading, setIsUploading] = useState(false)
-  const [file, setFile] = useState<File | null>(null)
-  const [uploadStatus, setUploadStatus] = useState<"idle" | "success" | "error">("idle")
-  const { toast } = useToast()
-  const router = useRouter()
-  const { addReport } = usePatient()
+  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
   const handleDragLeave = () => {
-    setIsDragging(false)
-  }
+    setIsDragging(false);
+  };
 
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
+    e.preventDefault();
+    setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const droppedFile = e.dataTransfer.files[0]
-      if (droppedFile.type === "application/pdf") {
-        setFile(droppedFile)
-      } else {
-        toast({
-          title: "Invalid file type",
-          description: "Please upload a PDF file",
-          variant: "destructive",
-        })
-      }
+      console.log("Files dropped:", e.dataTransfer.files);
+      handleFileUpload(e.dataTransfer.files);
     }
-  }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0])
+      console.log("Files selected:", e.target.files);
+      handleFileUpload(e.target.files);
     }
-  }
+  };
 
-  const handleUpload = async () => {
-    if (!file) return
+  const handleFileUpload = (fileList: FileList) => {
+    const newFiles: UploadedFile[] = [];
 
-    setIsUploading(true)
-
-    try {
-      // Mock API call to parse the PDF
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Mock successful parsing
-      const mockParsedData = {
-        id: Date.now().toString(),
-        filename: file.name,
-        uploadDate: new Date().toISOString(),
-        metrics: [
-          {
-            id: "cholesterol",
-            name: "Total Cholesterol",
-            value: 185,
-            unit: "mg/dL",
-            status: "balanced",
-            category: "blood",
-            lastUpdated: new Date().toISOString(),
-          },
-        ],
+    Array.from(fileList).forEach((file) => {
+      if (file.type === "application/pdf") {
+        newFiles.push({
+          name: file.name,
+          size: file.size,
+          url: URL.createObjectURL(file),
+        });
       }
+    });
 
-      addReport(mockParsedData)
-      setUploadStatus("success")
-
-      toast({
-        title: "Upload successful",
-        description: "Your lab results have been processed",
-      })
-
-      // Redirect to results page after a short delay
-      setTimeout(() => {
-        router.push("/results")
-      }, 1500)
-    } catch (error) {
-      setUploadStatus("error")
-      toast({
-        title: "Upload failed",
-        description: "There was an error processing your file",
-        variant: "destructive",
-      })
-    } finally {
-      setIsUploading(false)
+    if (newFiles.length > 0) {
+      setFiles((prev) => [...prev, ...newFiles]);
     }
-  }
+  };
 
   return (
-    <div className="bg-[#FAFEFF] min-h-screen">
+    <div className="min-h-screen bg-[#f8f9fa]">
       <TopBar title="Upload Results" />
       <DisclaimerBanner />
 
-      <div className="p-5">
-        <motion.h1
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-xl font-semibold mb-3 text-[#03659C]"
-        >
+      <div className="max-w-[640px] mx-auto px-6 py-6">
+        {/* Page Title with improved typography */}
+        <h1 className="text-2xl font-bold text-[#202124] mb-4">
           Upload Lab Results
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-[#03659C]/80 mb-6"
-        >
-          Upload your lab results PDF to automatically extract and track your health metrics.
-        </motion.p>
+        <p className="text-base text-[#5f6368] mb-6">
+          Upload your lab results to automatically extract and track your health
+          metrics.
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-[#E5F8FF] p-4 rounded-lg mb-6"
-        >
+        {/* Info Box - with Google Material styling */}
+        <div className="rounded-lg bg-[#e8f0fe] px-4 py-3 mb-6">
           <div className="flex items-center mb-2">
-            <Info className="h-5 w-5 mr-2 text-[#03659C]" />
-            <h3 className="font-medium text-[#03659C]">How it works</h3>
+            <Info className="h-4 w-4 mr-2 text-[#1a73e8]" aria-hidden="true" />
+            <h2 className="text-sm font-medium text-[#1a73e8]">How it works</h2>
           </div>
-          <ol className="list-decimal list-inside text-sm text-[#03659C]/80 space-y-2 ml-1">
+          <ol className="text-xs leading-5 ml-5 list-decimal text-[#5f6368]">
             <li>Upload your lab results PDF</li>
             <li>Our system extracts key health metrics</li>
             <li>View your results in an easy-to-understand format</li>
             <li>Track changes over time and get personalized insights</li>
           </ol>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="w-full max-w-md mx-auto"
+        {/* Drag and Drop Zone - modernized */}
+        <div
+          className={`
+            border-2 border-dashed rounded-xl min-h-[200px] 
+            flex items-center justify-center flex-col gap-5 mb-6
+            ${
+              isDragging
+                ? "bg-[#e8f0fe] border-[#1a73e8]"
+                : "border-[#9aa0a6]/30 hover:border-[#1a73e8]/30"
+            }
+            transition-all duration-200
+          `}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          role="button"
+          tabIndex={0}
+          aria-live="polite"
+          onClick={() => document.getElementById("file-input")?.click()}
         >
-          <div
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${
-              isDragging ? "border-[#03659C] bg-[#E5F8FF]" : "border-[#03659C]/30"
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            {uploadStatus === "idle" ? (
-              <>
-                <div className="mx-auto w-16 h-16 rounded-full bg-[#E5F8FF] flex items-center justify-center mb-4">
-                  <UploadCloud className="h-8 w-8 text-[#03659C]" />
-                </div>
-                <h3 className="text-lg font-medium mb-2 text-[#03659C]">Upload Lab Results</h3>
-                <p className="text-sm text-[#03659C]/80 mb-4">Drag and drop your PDF file here, or click to select</p>
-                <input
-                  type="file"
-                  id="file-upload"
-                  className="hidden"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                />
-                <label htmlFor="file-upload">
-                  <Button
-                    variant="outline"
-                    className="cursor-pointer bg-white border-[#03659C]/30 text-[#03659C] hover:bg-[#E5F8FF]"
-                    disabled={isUploading}
-                    type="button"
-                  >
-                    <FileType className="h-4 w-4 mr-2" />
-                    Select PDF
-                  </Button>
-                </label>
-              </>
-            ) : uploadStatus === "success" ? (
-              <div className="text-center">
-                <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                  <Check className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-lg font-medium mb-2 text-[#03659C]">Upload Complete</h3>
-                <p className="text-sm text-[#03659C]/80">Your lab results have been processed</p>
-              </div>
-            ) : (
-              <div className="text-center">
-                <div className="mx-auto w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
-                  <AlertCircle className="h-8 w-8 text-red-600" />
-                </div>
-                <h3 className="text-lg font-medium mb-2 text-[#03659C]">Upload Failed</h3>
-                <p className="text-sm text-[#03659C]/80 mb-4">There was an error processing your file</p>
-                <Button
-                  variant="outline"
-                  onClick={() => setUploadStatus("idle")}
-                  type="button"
-                  className="bg-white border-[#03659C]/30 text-[#03659C] hover:bg-[#E5F8FF]"
-                >
-                  Try Again
-                </Button>
-              </div>
-            )}
+          <div className="w-16 h-16 bg-[#e8f0fe] rounded-full flex items-center justify-center">
+            <Upload className="h-7 w-7 text-[#1a73e8]" aria-hidden="true" />
           </div>
-
-          {file && uploadStatus === "idle" && (
-            <div className="mt-4">
-              <div className="flex items-center p-4 bg-white rounded-lg border border-[#E5F8FF]">
-                <FileText className="h-5 w-5 text-[#03659C] mr-3" />
-                <span className="text-sm font-medium truncate flex-1 text-[#03659C]">{file.name}</span>
-                <Button
-                  onClick={handleUpload}
-                  disabled={isUploading}
-                  className="ml-2 bg-[#03659C] hover:bg-[#024e78]"
-                  type="button"
-                >
-                  {isUploading ? "Processing..." : "Upload"}
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-6 text-xs text-center text-[#03659C] bg-[#E5F8FF] p-3 rounded-lg">
-            <p>Our system will automatically extract key health metrics from your lab results.</p>
-            <p className="mt-1">Always consult with your healthcare provider about your results.</p>
-          </div>
-
-          <div className="mt-6 bg-white p-4 rounded-lg border border-[#E5F8FF]">
-            <h3 className="font-medium text-[#03659C] mb-2">Supported Lab Reports</h3>
-            <p className="text-sm text-[#03659C]/80 mb-3">
-              We currently support PDF lab reports from the following providers:
+          <div className="text-center">
+            <p className="text-base font-medium text-[#202124] mb-2">
+              Upload Lab Results
             </p>
-            <ul className="text-sm text-[#03659C]/80 space-y-1 list-disc pl-5">
-              <li>Quest Diagnostics</li>
-              <li>LabCorp</li>
-              <li>Mayo Clinic Laboratories</li>
-              <li>Cleveland Clinic Labs</li>
-              <li>Most hospital-based lab reports</li>
-            </ul>
+            <p className="text-sm text-[#5f6368]">
+              Select the test report you need to review
+            </p>
           </div>
-        </motion.div>
+          <input
+            id="file-input"
+            type="file"
+            accept="application/pdf"
+            multiple
+            className="hidden"
+            aria-label="Upload lab PDF"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {/* Legal Strip - modernized */}
+        <div className="bg-[#f1f3f4] rounded-lg px-4 py-3 text-xs text-[#5f6368] mb-6">
+          <p>
+            Our system will automatically extract key health metrics from your
+            lab results.
+          </p>
+          <p className="mt-1 italic">
+            Always consult with your healthcare provider about your results.
+          </p>
+        </div>
+
+        {/* Supported Lab Reports Box - with material design */}
+        <div className="mt-4">
+          <h3 className="text-sm font-medium text-[#202124] mb-2">
+            Supported Lab Reports
+          </h3>
+          <p className="text-xs text-[#5f6368] mb-1">
+            We currently support PDF lab reports from the following providers:
+          </p>
+          <ul className="list-disc ml-5 text-xs text-[#5f6368]">
+            <li>Quest Diagnostics</li>
+            <li>LabCorp</li>
+            <li>Mayo Clinic Laboratories</li>
+            <li>Cleveland Clinic Labs</li>
+            <li>Most hospital-based lab reports</li>
+          </ul>
+        </div>
+
+        {/* Display uploaded files if any - with modern styling */}
+        {files.length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-sm font-medium text-[#202124] mb-3">
+              Uploaded Files
+            </h3>
+            <div className="space-y-3">
+              {files.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center p-4 bg-white rounded-lg shadow-sm"
+                >
+                  <CheckCircle className="h-5 w-5 text-[#34a853] mr-3" />
+                  <div className="flex-1">
+                    <p className="text-sm text-[#202124] font-medium">
+                      {file.name}
+                    </p>
+                    <p className="text-xs text-[#5f6368]">
+                      {Math.round(file.size / 1024)} KB
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }

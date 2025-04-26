@@ -20,6 +20,8 @@ import {
   Share2,
   X,
   Filter,
+  Brain,
+  Droplet,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -481,7 +483,7 @@ export function DocumentViewer() {
   const [filters, setFilters] = useState({
     sortOrder: "newest",
     showProgress: true,
-    filter: "recent-abnormal",
+    filter: "all",
     dateRange: "all",
   });
   const [activeTab, setActiveTab] = useState("all");
@@ -523,6 +525,8 @@ export function DocumentViewer() {
         return "Vitamins";
       case "organ":
         return "Organ Function";
+      case "urine":
+        return "Urine Tests";
       default:
         return "General";
     }
@@ -532,13 +536,15 @@ export function DocumentViewer() {
   const getCategoryFilterIcon = (category: string) => {
     switch (category) {
       case "blood":
-        return <Beaker className="h-4 w-4" />;
+        return <Droplet className="h-4 w-4" />;
       case "heart":
         return <Heart className="h-4 w-4" />;
       case "vitamin":
         return <Activity className="h-4 w-4" />;
       case "organ":
-        return <Activity className="h-4 w-4" />;
+        return <Brain className="h-4 w-4" />;
+      case "urine":
+        return <Beaker className="h-4 w-4" />;
       default:
         return <FileText className="h-4 w-4" />;
     }
@@ -576,28 +582,17 @@ export function DocumentViewer() {
   const getReportIcon = (type: string) => {
     switch (type) {
       case "blood":
-        return <Beaker className="h-5 w-5 text-[#03659C]" />;
+        return <Droplet className="h-5 w-5 text-[#03659C]" />;
       case "heart":
         return <Heart className="h-5 w-5 text-[#03659C]" />;
       case "vitamin":
         return <Activity className="h-5 w-5 text-[#03659C]" />;
       case "organ":
-        return <Activity className="h-5 w-5 text-[#03659C]" />;
+        return <Brain className="h-5 w-5 text-[#03659C]" />;
+      case "urine":
+        return <Beaker className="h-5 w-5 text-[#03659C]" />;
       default:
         return <FileText className="h-5 w-5 text-[#03659C]" />;
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "normal":
-        return <CheckCircle className="h-4 w-4 text-teal-500" />;
-      case "mixed":
-        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-      case "review":
-        return <AlertCircle className="h-4 w-4 text-rose-500" />;
-      default:
-        return null;
     }
   };
 
@@ -607,11 +602,10 @@ export function DocumentViewer() {
         return (
           <Badge
             variant="outline"
-            className="px-2 py-0.5 text-xs rounded-md bg-green-50 border-green-200 text-green-800"
+            className="pl-1.5 pr-3 py-1 text-xs rounded-md bg-green-50 border-green-200 text-green-800 flex items-center justify-center w-[100px] h-[28px]"
           >
             <span className="flex items-center">
-              {getStatusIcon(status)}
-              <span className="ml-1">Balanced</span>
+              <span className="ml-1">😊 Balanced</span>
             </span>
           </Badge>
         );
@@ -619,11 +613,10 @@ export function DocumentViewer() {
         return (
           <Badge
             variant="outline"
-            className="px-2 py-0.5 text-xs rounded-md bg-amber-50 border-amber-200 text-amber-800"
+            className="pl-2 pr-3 py-1 text-xs rounded-md bg-amber-50 border-amber-200 text-amber-800 flex items-center justify-center w-[100px] h-[28px]"
           >
             <span className="flex items-center">
-              {getStatusIcon(status)}
-              <span className="ml-1">Manage</span>
+              <span className="ml-1">🍎 Manage</span>
             </span>
           </Badge>
         );
@@ -631,11 +624,10 @@ export function DocumentViewer() {
         return (
           <Badge
             variant="outline"
-            className="px-2 py-0.5 text-xs rounded-md bg-rose-50 border-rose-200 text-rose-800"
+            className="pl-1.5 pr-3 py-1 text-xs rounded-md bg-rose-50 border-rose-200 text-rose-800 flex items-center justify-center w-[100px] h-[28px]"
           >
             <span className="flex items-center">
-              {getStatusIcon(status)}
-              <span className="ml-1">Consult</span>
+              <span className="ml-1">🔍 Review</span>
             </span>
           </Badge>
         );
@@ -817,10 +809,11 @@ export function DocumentViewer() {
             <div className="flex items-center justify-end">
               <SmartFilter onFilterChange={handleFilterChange} />
 
-              <div className="text-xs text-[#03659C]/70 ml-3">
-                {filteredReports.length}{" "}
-                {filteredReports.length === 1 ? "report" : "reports"}
-              </div>
+              <span className="text-xs text-[#03659C]/70 ml-2">
+                {filters.sortOrder === "newest"
+                  ? "Sorted by newest"
+                  : "Sorted by oldest"}
+              </span>
             </div>
           </div>
         </div>
@@ -848,13 +841,13 @@ export function DocumentViewer() {
               variant="outline"
               size="sm"
               className={cn(
-                "text-xs border-[#03659C]/20 hover:bg-[#E5F8FF]",
+                "text-[10px] border-[#03659C]/20 hover:bg-[#E5F8FF] py-0 px-2",
                 activeCategory === category && "bg-[#E5F8FF]"
               )}
               onClick={() => handleCategoryFilter(category)}
             >
               {getCategoryFilterIcon(category)}
-              <span className="ml-1 truncate max-w-[120px]">
+              <span className="ml-1 truncate max-w-[100px]">
                 {getCategoryDisplayName(category)}
               </span>
             </Button>
@@ -899,15 +892,15 @@ export function DocumentViewer() {
                           {getReportIcon(report.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center">
-                            <h3 className="font-medium text-[#03659C] truncate">
+                          <div className="flex items-start">
+                            <h3 className="font-medium text-[#03659C] break-words">
                               {report.title}
                             </h3>
                             {differenceInDays(
                               new Date(),
                               new Date(report.date)
                             ) <= 14 && (
-                              <span className="ml-2">
+                              <span className="ml-2 flex-shrink-0">
                                 {getFreshnessIndicator(report.date)}
                               </span>
                             )}
@@ -961,7 +954,7 @@ export function DocumentViewer() {
                               <span className="text-sm font-medium text-[#03659C]">
                                 Patient ID: {report.patientId}
                               </span>
-                              <span className="text-xs bg-[#E5F8FF] px-2 py-0.5 rounded-full text-[#03659C]">
+                              <span className="text-xs bg-[#E5F8FF] pl-2 pr-3 py-1rounded-full text-[#03659C]">
                                 Insurance: {report.insurance}
                               </span>
                             </div>

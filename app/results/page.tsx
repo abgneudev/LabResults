@@ -3,19 +3,18 @@
 import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { usePatient } from "@/context/patient-context";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReferenceRangeChart } from "@/components/reference-range-chart";
-import { HealthSummary } from "@/components/health-summary";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { PersonalizedTracking } from "@/components/personalized-tracking";
 import { DocumentViewer } from "@/components/document-viewer";
-import { MetricProfile } from "@/components/metric-profile";
 import { VitalsDashboard } from "@/components/vitals-dashboard";
+import { HeroSection } from "@/components/hero-section";
 
 // Mock data for the chart
 const chartData = [
@@ -78,6 +77,10 @@ export default function ResultsPage() {
     { date: new Date(0), type: "" }
   );
 
+  // Calculate days since last test (for our freshness ring)
+  const today = new Date();
+  const daysSinceLastTest = Math.floor((today.getTime() - mostRecentTest.date.getTime()) / (1000 * 60 * 60 * 24));
+
   // Calculate trend metrics
   const trendMetrics = {
     improving: 2,
@@ -85,14 +88,21 @@ export default function ResultsPage() {
     worsening: 1,
   };
 
+  // Handle view trend button click
+  const handleViewTrend = () => {
+    // In a real app, this would navigate to a trend view or open a modal
+    console.log("View trend clicked");
+  };
+
   return (
     <div
-      className="min-h-screen bg-[#FAFEFF]"
+      className="min-h-screen bg-white"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <TopBar showBack={false} />
+      {/* Header with required height and disclaimer banner below */}
+      <TopBar showBack={false} className="h-14" />
       <DisclaimerBanner />
 
       {refreshing && (
@@ -102,26 +112,25 @@ export default function ResultsPage() {
         </div>
       )}
 
-      <div className="p-5">
-        <motion.h1
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-2xl font-semibold mb-4 text-[#03659C]"
-        >
-          Your health at a glance, {patientData.name}
-        </motion.h1>
+      {/* Hero Section */}
+      <HeroSection
+        firstName={patientData.name.split(" ")[0]}
+        lastTest={{
+          type: mostRecentTest.type,
+          date: mostRecentTest.date
+        }}
+        daysSinceLastTest={daysSinceLastTest}
+        metrics={{
+          total: patientData.metrics.length,
+          improving: trendMetrics.improving,
+          stable: trendMetrics.stable,
+          worsening: trendMetrics.worsening
+        }}
+        onViewTrend={handleViewTrend}
+      />
 
-        {/* Health Summary with progress ring */}
-        <HealthSummary
-          lastTestDate={mostRecentTest.date.toISOString()}
-          testType={mostRecentTest.type}
-          testCount={patientData.metrics.length}
-          improvingMetrics={trendMetrics.improving}
-          stableMetrics={trendMetrics.stable}
-          worseningMetrics={trendMetrics.worsening}
-          daysUntilNextTest={45}
-        />
-
+      {/* Content Tabs */}
+      <div className="px-5 max-w-[640px] mx-auto">
         <Tabs
           defaultValue="timeline"
           className="mb-6"
