@@ -23,34 +23,34 @@ export function useResultInterpretation(status: string) {
         switch (status) {
           case "balanced":
             setSummary(
-              "Your result is within the normal range, which is a positive sign for your overall health. Values in this range typically indicate normal physiological function."
+              "Your result is within the normal range, which is a positive sign for your overall health. This indicates your body is functioning as expected for this measurement."
             );
             setRecommendation(
-              "Continue your current health practices including a balanced diet, regular exercise, and follow-up testing as recommended by your healthcare provider."
+              "Maintain your current health practices and continue with regular check-ups as recommended by your healthcare provider."
             );
             break;
           case "manage":
             setSummary(
-              "Your result is outside the optimal range but doesn't require immediate medical attention. This could be influenced by diet, exercise, stress, medications, or other factors."
+              "Your result is outside the optimal range but doesn't require immediate medical attention. Several factors like diet, exercise, stress, or medications could be influencing this value."
             );
             setRecommendation(
-              "Consider lifestyle adjustments such as dietary changes, increased physical activity, or stress management techniques. Monitor this value more frequently and discuss with your healthcare provider at your next visit."
+              "Consider reviewing your lifestyle habits such as diet, physical activity, and stress management. Monitor this value more regularly and discuss it at your next healthcare visit."
             );
             break;
           case "consult":
             setSummary(
-              "Your result is significantly outside the expected range, which may indicate a health concern that requires attention. Various factors could be contributing to this result."
+              "Your result falls significantly outside the expected range, which may indicate a health concern that warrants attention. This could be related to various underlying factors."
             );
             setRecommendation(
-              "It's recommended to consult with your healthcare provider soon to discuss this result. They may want to perform additional tests or discuss treatment options. Don't make significant changes to medications or health routines without professional guidance."
+              "We recommend consulting with your healthcare provider soon to discuss this result. They may suggest additional testing or treatment options. Continue following your current medication and health routines until you receive professional guidance."
             );
             break;
           case "book":
             setSummary(
-              "This test needs to be scheduled or completed. Regular monitoring is important to establish baselines and track changes over time."
+              "This test needs to be scheduled. Regular monitoring helps establish your personal baselines and track important changes over time."
             );
             setRecommendation(
-              "Book an appointment for this test at your convenience. Regular testing helps your healthcare provider monitor your health effectively and catch potential issues early."
+              "Schedule this test at your convenience. Consistent testing allows your healthcare provider to monitor your health effectively and address potential concerns early."
             );
             break;
           default:

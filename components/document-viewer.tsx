@@ -809,8 +809,8 @@ export function DocumentViewer() {
   const groupedReports = groupReportsByMode(filteredReports);
 
   return (
-    <div className="bg-white rounded-lg border border-[#E5F8FF] overflow-hidden">
-      <div className="p-2">
+    <div className="bg-white overflow-hidden">
+      <div>
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#03659C] h-5 w-5" />
           <Input

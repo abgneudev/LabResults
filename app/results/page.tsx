@@ -21,7 +21,6 @@ import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { PersonalizedTracking } from "@/components/personalized-tracking";
 import { HeroSection } from "@/components/hero-section";
 import { ResultsSummary } from "@/components/results-summary";
-import { UploadLabsCta } from "@/components/upload-labs-cta";
 
 // Mock data for the chart
 const chartData = [
@@ -345,9 +344,6 @@ export default function ResultsPage() {
             </div>
           </div>
         </div>
-
-        {/* Upload Labs CTA */}
-        <UploadLabsCta />
       </div>
 
       {/* Personalized Tracking Modal */}
