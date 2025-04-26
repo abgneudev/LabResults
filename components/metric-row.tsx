@@ -72,21 +72,21 @@ export function MetricRow({ metric, className }: MetricRowProps) {
         <div>
           <Link
             href={`/results/${metric.id}`}
-            className="font-medium text-[#03659C] hover:underline"
+            className="font-semibold text-[#03659C] hover:underline"
           >
             {metric.name}
           </Link>
         </div>
       </div>
       <div className="flex items-center space-x-3 flex-shrink-0">
-        <div className="text-[#03659C] font-medium">
+        <div className="text-[#03659C] font-bold">
           {metric.value}{" "}
-          <span className="text-xs font-normal">{metric.unit}</span>
+          <span className="text-xs font-light">{metric.unit}</span>
         </div>
 
         <div
           className={cn(
-            "px-2 py-1 text-xs rounded-full font-medium whitespace-nowrap",
+            "px-2 py-1 text-xs rounded-full font-semibold whitespace-nowrap",
             getStatusBadgeStyle(metric.status)
           )}
         >
@@ -97,7 +97,7 @@ export function MetricRow({ metric, className }: MetricRowProps) {
           <Button
             variant="outline"
             size="sm"
-            className="text-xs h-7 px-2 text-[#03659C] border-[#03659C]/20 whitespace-nowrap"
+            className="text-xs h-7 px-2 text-[#03659C] border-[#03659C]/20 whitespace-nowrap font-medium"
           >
             <MessageSquare className="h-3 w-3 mr-1" />
             Message doc

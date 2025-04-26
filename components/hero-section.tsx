@@ -45,14 +45,50 @@ export function HeroSection({
       {/* Hero Block */}
       <div>
         <p className="text-lg font-medium mb-1">Hello, {firstName} 👋</p>
-        <h1 className="text-2xl font-bold text-[#03659C] mb-4">
-          Your labs at a glance
-        </h1>
+        <div className="flex flex-col space-y-1 mt-2">
+          <div className="flex items-center">
+            <svg
+              className="w-5 h-5 mr-2 text-[#03659C]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span className="text-sm text-[#03659C]">Patient ID:</span>
+            <span className="text-sm ml-1">A6294</span>
+          </div>
+          <div className="flex items-center">
+            <svg
+              className="w-5 h-5 mr-2 text-[#03659C]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            <span className="text-sm text-[#03659C]">Insurance provider:</span>
+            <span className="text-sm ml-1">BlueCross BlueShield</span>
+          </div>
+        </div>
       </div>
+
+      {/* ResultsSummary will be inserted right after this point in the results page */}
 
       {/* Lab Test Booking Options */}
       <div className="mb-4">
-        <h2 className="text-lg font-medium text-[#03659C] mb-3">
+        <h2 className="text-lg font-semibold text-[#03659C] mb-3">
           Book a Lab Test
         </h2>
 
@@ -65,7 +101,7 @@ export function HeroSection({
             >
               <Droplet className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Blood Panel
             </span>
           </div>
@@ -77,7 +113,7 @@ export function HeroSection({
             >
               <Heart className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Cholesterol
             </span>
           </div>
@@ -89,7 +125,7 @@ export function HeroSection({
             >
               <Sun className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Vitamin Panel
             </span>
           </div>
@@ -104,7 +140,7 @@ export function HeroSection({
             >
               <Activity className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Thyroid
             </span>
           </div>
@@ -116,7 +152,7 @@ export function HeroSection({
             >
               <ActivitySquare className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Diabetes
             </span>
           </div>
@@ -128,7 +164,7 @@ export function HeroSection({
             >
               <ClipboardCheck className="h-7 w-7 text-[#03659C]" />
             </Link>
-            <span className="text-xs text-[#03659C]/80 text-center">
+            <span className="text-xs font-medium text-[#03659C]/80 text-center">
               Comprehensive
             </span>
           </div>

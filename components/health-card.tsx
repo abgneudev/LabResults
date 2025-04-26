@@ -176,20 +176,20 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
           >
             <div
               className={cn(
-                "px-3 py-2 flex flex-col", // Reduced padding to make card more compact
+                "px-3 py-2 flex flex-col",
                 getCategoryBgColor(metric.category)
               )}
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="font-medium text-gray-800 text-base">
+                  <h3 className="font-semibold text-gray-800 text-base">
                     {metric.name}
                   </h3>
                 </div>
                 <StatusIndicator status={metric.status} />
               </div>
 
-              <div className="flex items-end justify-between mt-0.5"> {/* Reduced margin */}
+              <div className="flex items-end justify-between mt-0.5">
                 <div className="text-2xl font-bold text-gray-800">
                   {metric.value}{" "}
                   <span className="text-sm font-normal ml-1">
@@ -203,14 +203,16 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
                       size: 14,
                       className: "mr-1",
                     })}
-                    <span>{trendText}</span>
+                    <span className="font-medium">{trendText}</span>
                   </div>
                 )}
               </div>
 
-              <div className="text-xs text-gray-500 flex items-center mt-0.5"> {/* Reduced margin */}
+              <div className="text-xs text-gray-500 flex items-center mt-0.5">
                 <Info className="h-3 w-3 mr-1" />
-                {formattedDate} • {getNormalRange(metric.id)}
+                <span className="font-light">
+                  {formattedDate} • {getNormalRange(metric.id)}
+                </span>
               </div>
             </div>
           </div>
@@ -223,7 +225,7 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
               e.preventDefault();
               setIsExpanded(!isExpanded);
             }}
-            className="w-full py-1.5 px-3 flex justify-between items-center text-xs font-medium text-left text-gray-600 hover:bg-[#FAFEFF] transition-colors rounded-lg" /* Reduced padding */
+            className="w-full py-1.5 px-3 flex justify-between items-center text-xs font-medium text-left text-gray-600 hover:bg-[#FAFEFF] transition-colors rounded-lg"
             aria-expanded={isExpanded}
             aria-controls={`info-${metric.id}`}
           >
@@ -248,10 +250,10 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
               id={`info-${metric.id}`}
             >
               <div>
-                <span className="font-medium text-gray-800 block mb-1">
+                <span className="font-semibold text-gray-800 block mb-1">
                   Why it matters:
                 </span>
-                <span className="text-gray-600">
+                <span className="text-gray-600 font-normal">
                   {getWhyItMatters(metric.id)}
                 </span>
               </div>
@@ -261,11 +263,13 @@ export function HealthCard({ metric, index, className }: HealthCardProps) {
                     size: 14,
                     className: "mr-1.5 text-gray-700",
                   })}
-                  <span className="font-medium text-gray-800">
+                  <span className="font-semibold text-gray-800">
                     Lifestyle tip:
                   </span>
                 </div>
-                <p className="text-gray-600">{getLifestyleTip(metric.id)}</p>
+                <p className="text-gray-600 font-normal">
+                  {getLifestyleTip(metric.id)}
+                </p>
               </div>
             </motion.div>
           )}

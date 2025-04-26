@@ -1,20 +1,25 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Shield } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
-import { NextTestProgressRing } from "@/components/progress-ring"
-import { TrendSnapshot } from "@/components/trend-snapshot"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { motion } from "framer-motion";
+import { Shield } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { NextTestProgressRing } from "@/components/progress-ring";
+import { TrendSnapshot } from "@/components/trend-snapshot";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface HealthSummaryProps {
-  lastTestDate: string
-  testType: string
-  testCount: number
-  improvingMetrics: number
-  stableMetrics: number
-  worseningMetrics: number
-  daysUntilNextTest: number
+  lastTestDate: string;
+  testType: string;
+  testCount: number;
+  improvingMetrics: number;
+  stableMetrics: number;
+  worseningMetrics: number;
+  daysUntilNextTest: number;
 }
 
 export function HealthSummary({
@@ -26,22 +31,26 @@ export function HealthSummary({
   worseningMetrics,
   daysUntilNextTest,
 }: HealthSummaryProps) {
-  const date = new Date(lastTestDate)
-  const timeAgo = formatDistanceToNow(date, { addSuffix: true })
+  const date = new Date(lastTestDate);
+  const timeAgo = formatDistanceToNow(date, { addSuffix: true });
   const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  })
+  });
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 text-[#03659C]">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-6 text-[#03659C]"
+    >
       <div className="flex items-start justify-between mb-4">
         <div className="border-l-4 border-[#03659C] pl-3">
           <div className="flex items-center mb-1">
-            <span className="text-sm font-medium">Last Test: {timeAgo}</span>
+            <span className="text-sm font-semibold">Last Test: {timeAgo}</span>
           </div>
-          <p className="text-sm text-[#03659C]/80">
+          <p className="text-sm text-[#03659C]/80 font-normal">
             {testType} • {formattedDate}
           </p>
         </div>
@@ -54,27 +63,34 @@ export function HealthSummary({
           <span className="text-lg mr-2" role="img" aria-label="Chart">
             📊
           </span>
-          <span className="text-sm text-[#03659C]/80">Tracking {testCount} key metrics</span>
+          <span className="text-sm text-[#03659C]/80 font-medium">
+            Tracking {testCount} key metrics
+          </span>
         </div>
 
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex items-center text-xs text-[#03659C]/70 hover:text-[#03659C] cursor-help">
+              <div className="flex items-center text-xs text-[#03659C]/70 hover:text-[#03659C] cursor-help font-medium">
                 <Shield className="h-4 w-4 mr-1 text-[#03659C]" />
                 <span>Private & secure</span>
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p className="text-sm">
-                Your health data is encrypted and private. We never share your information without your consent.
+              <p className="text-sm font-normal">
+                Your health data is encrypted and private. We never share your
+                information without your consent.
               </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
 
-      <TrendSnapshot improving={improvingMetrics} stable={stableMetrics} worsening={worseningMetrics} />
+      <TrendSnapshot
+        improving={improvingMetrics}
+        stable={stableMetrics}
+        worsening={worseningMetrics}
+      />
     </motion.div>
-  )
+  );
 }
