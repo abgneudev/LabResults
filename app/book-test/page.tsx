@@ -1,8 +1,7 @@
 "use client";
 
 import type React from "react";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { TopBar } from "@/components/top-bar";
@@ -29,7 +28,7 @@ import {
   Droplet,
   Heart,
   Pill,
-  Flask,
+  Beaker,
   Activity,
   ChevronRight,
   Sun,
@@ -68,7 +67,7 @@ const labTests = [
   },
   {
     id: "thyroid",
-    icon: <Flask size={20} />,
+    icon: <Beaker size={20} />,
     label: "Thyroid Function",
     why: "Checks thyroid hormone levels to evaluate metabolism",
     price: 35,
@@ -129,9 +128,10 @@ const LabTestCard = ({
       </div>
     </button>
   );
-};
+}
 
-export default function BookTestPage() {
+// Main component with Suspense wrapping
+function BookTestContent() {
   const searchParams = useSearchParams();
   const [testType, setTestType] = useState("");
   const [lab, setLab] = useState("");
@@ -310,5 +310,33 @@ export default function BookTestPage() {
         </motion.form>
       </div>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function BookTestLoading() {
+  return (
+    <div>
+      <TopBar title="Book a Test" />
+      <div className="p-4">
+        <h1 className="text-xl font-semibold mb-6">Schedule a Lab Test</h1>
+        <div className="animate-pulse space-y-4">
+          <div className="h-40 bg-gray-200 rounded-lg"></div>
+          <div className="h-10 bg-gray-200 rounded-md"></div>
+          <div className="h-10 bg-gray-200 rounded-md"></div>
+          <div className="h-10 bg-gray-200 rounded-md"></div>
+          <div className="h-10 bg-gray-200 rounded-md"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function BookTestPage() {
+  return (
+    <Suspense fallback={<BookTestLoading />}>
+      <BookTestContent />
+    </Suspense>
   );
 }
