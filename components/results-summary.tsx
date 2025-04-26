@@ -145,14 +145,12 @@ export function ResultsSummary({
         onValueChange={setActiveTab}
         value={activeTab}
       >
-        <TabsList className="w-full grid grid-cols-3 gap-1 text-sm bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+        <TabsList className="w-full grid grid-cols-3 gap-0 text-sm bg-transparent p-0 rounded-full border-none shadow-none flex items-center justify-center">
           <TabsTrigger
             value="new"
             className={cn(
-              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
-              activeTab === "new"
-                ? "bg-[#03659C] text-white font-medium ring-2 ring-[#03659C] ring-offset-2"
-                : "text-gray-600 hover:bg-gray-50"
+              "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
+              activeTab === "new" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="new" className="mr-1.5 text-xs">
@@ -160,14 +158,12 @@ export function ResultsSummary({
             </span>
             New ({newResults.length})
           </TabsTrigger>
-
+          <span className="text-[#03659C] mx-1 select-none">|</span>
           <TabsTrigger
             value="upcoming"
             className={cn(
-              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
-              activeTab === "upcoming"
-                ? "bg-[#03659C] text-white font-medium ring-2 ring-[#03659C] ring-offset-2"
-                : "text-gray-600 hover:bg-gray-50"
+              "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
+              activeTab === "upcoming" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="upcoming" className="mr-1.5 text-xs">
@@ -175,14 +171,12 @@ export function ResultsSummary({
             </span>
             Upcoming ({upcomingResults.length})
           </TabsTrigger>
-
+          <span className="text-[#03659C] mx-1 select-none">|</span>
           <TabsTrigger
             value="last"
             className={cn(
-              "rounded-full px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2",
-              activeTab === "last"
-                ? "bg-blue-500 text-white font-medium ring-2 ring-blue-500 ring-offset-2"
-                : "text-gray-600 hover:bg-gray-50"
+              "rounded-none px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#03659C] focus:ring-offset-2 border-none !border-transparent text-[#03659C] font-semibold !bg-transparent shadow-none ring-0",
+              activeTab === "last" && "underline underline-offset-4 !bg-transparent shadow-none ring-0 border-none !border-transparent"
             )}
           >
             <span role="img" aria-label="previous" className="mr-1.5 text-xs">
@@ -356,7 +350,9 @@ function ResultCard({
   index,
   total,
 }: ResultCardProps & { index?: number; total?: number }) {
-  const testEmoji = testTypeEmojis[testName] || testTypeEmojis.default;
+  const testEmoji =
+    (testTypeEmojis as Record<string, string>)[testName] ||
+    testTypeEmojis.default;
 
   // Get status style to match VitalsDashboard component
   const getStatusDetails = () => {
@@ -409,11 +405,16 @@ function ResultCard({
           {testEmoji}
         </div>
         <div className="flex-1">
-          <h3 className="text-base font-semibold text-slate-800">{testName}</h3>
+          <span className="block text-xs text-gray-500 font-medium leading-tight mb-0.5">
+            Lab Report:
+          </span>
+          <h3 className="text-xl font-bold text-slate-800 leading-tight">
+            {testName}
+          </h3>
         </div>
         <div
           className={cn(
-            "px-3 py-1 rounded-full text-xs font-medium flex items-center h-6",
+            "px-3 py-1 rounded-full text-[10px] font-medium flex items-center h-5",
             statusDetails.className
           )}
         >
@@ -425,32 +426,32 @@ function ResultCard({
       {/* Section 2: Metadata section - simplified to 2x2 grid with clearer hierarchy */}
       <div className="grid grid-cols-2 gap-y-3 mb-4 pb-4 border-b border-gray-100">
         <div className="flex items-center">
-          <Search className="h-3.5 w-3.5 mr-2 text-gray-400 flex-shrink-0" />
-          <span className="text-xs text-gray-500">Reason:</span>
+          <Search className="h-3 w-3 mr-1.5 text-gray-400 flex-shrink-0" />
+          <span className="text-[10px] text-gray-500">Reason:</span>
           <span className="text-xs text-gray-700 font-medium ml-1">
             {reason}
           </span>
         </div>
 
         <div className="flex items-center">
-          <Calendar className="h-3.5 w-3.5 mr-2 text-gray-400 flex-shrink-0" />
-          <span className="text-xs text-gray-500">Date:</span>
+          <Calendar className="h-3 w-3 mr-1.5 text-gray-400 flex-shrink-0" />
+          <span className="text-[10px] text-gray-500">Date:</span>
           <span className="text-xs text-gray-700 font-medium ml-1">
             {dateTaken}
           </span>
         </div>
 
         <div className="flex items-center">
-          <HospitalIcon className="h-3.5 w-3.5 mr-2 text-gray-400 flex-shrink-0" />
-          <span className="text-xs text-gray-500">Lab:</span>
+          <HospitalIcon className="h-3 w-3 mr-1.5 text-gray-400 flex-shrink-0" />
+          <span className="text-[10px] text-gray-500">Lab:</span>
           <span className="text-xs text-gray-700 font-medium ml-1">
             {labName}
           </span>
         </div>
 
         <div className="flex items-center">
-          <ClipboardList className="h-3.5 w-3.5 mr-2 text-gray-400 flex-shrink-0" />
-          <span className="text-xs text-gray-500">Profiles:</span>
+          <ClipboardList className="h-3 w-3 mr-1.5 text-gray-400 flex-shrink-0" />
+          <span className="text-[10px] text-gray-500">Profiles:</span>
           <span className="text-xs text-gray-700 font-medium ml-1">
             {profiles?.length || 0}
           </span>

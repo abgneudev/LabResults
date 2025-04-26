@@ -1,7 +1,6 @@
 "use client";
 
 import { format } from "date-fns";
-import { FreshnessRing } from "./freshness-ring";
 import { SummaryCard } from "./summary-card";
 import { UploadLabsCta } from "./upload-labs-cta";
 import Link from "next/link";
@@ -87,7 +86,7 @@ export function HeroSection({
       {/* ResultsSummary will be inserted right after this point in the results page */}
 
       {/* Lab Test Booking Options */}
-      <div className="mb-4">
+      <div className="mb-10 mt-10">
         <h2 className="text-lg font-semibold text-[#03659C] mb-3">
           Book a Lab Test
         </h2>

@@ -17,10 +17,10 @@ export default function ReportsPage() {
       <div className="p-6 max-w-[640px] mx-auto">
         {/* Upload Labs CTA */}
         <UploadLabsCta />
-        
+
         {/* Break line spacing */}
         <div className="mb-6"></div>
-        
+
         {/* Document Viewer Component */}
         <DocumentViewer />
       </div>

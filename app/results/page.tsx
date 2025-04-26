@@ -11,6 +11,7 @@ import {
   Activity,
   ActivitySquare,
   ClipboardCheck,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { usePatient } from "@/context/patient-context";
@@ -31,90 +32,98 @@ const chartData = [
 ];
 
 // Mock data for ResultsSummary
-const mockNewResults = [
-  {
-    id: "new-1",
-    testName: "Complete Blood Panel",
-    status: "follow-up",
-    reason: "Annual checkup",
-    dateTaken: "Apr 18, 2025",
-    labName: "Quest Diagnostics",
-    profiles: ["Red blood cells", "White blood cells", "Platelets"],
-    abnormalValues: [
-      "White blood cell count: 12.3 K/uL (High)",
-      "Hemoglobin: 11.2 g/dL (Low)",
-    ],
-    previousTest: {
-      date: "Oct 12, 2024",
-      changes: [
-        { name: "WBC Count", trend: "up" },
-        { name: "RBC Count", trend: "stable" },
-        { name: "Hemoglobin", trend: "down" },
+const mockNewResults: import("@/components/results-summary").ResultCardProps[] =
+  [
+    {
+      id: "new-1",
+      testName: "Complete Blood Panel",
+      status: "follow-up",
+      reason: "Annual checkup",
+      dateTaken: "Apr 18, 2025",
+      labName: "Quest Diagnostics",
+      profiles: ["Red blood cells", "White blood cells", "Platelets"],
+      abnormalValues: [
+        "White blood cell count: 12.3 K/uL (High)",
+        "Hemoglobin: 11.2 g/dL (Low)",
       ],
+      previousTest: {
+        date: "Oct 12, 2024",
+        changes: [
+          { name: "WBC Count", trend: "up" },
+          { name: "RBC Count", trend: "stable" },
+          { name: "Hemoglobin", trend: "down" },
+        ],
+      },
+      relatedTests: ["Hemoglobin A1C", "Iron Studies"],
     },
-    relatedTests: ["Hemoglobin A1C", "Iron Studies"],
-  },
-  {
-    id: "new-2",
-    testName: "Lipid Panel",
-    status: "normal",
-    reason: "Cholesterol monitoring",
-    dateTaken: "Apr 15, 2025",
-    labName: "LabCorp",
-    profiles: ["LDL", "HDL", "Total Cholesterol", "Triglycerides"],
-    previousTest: {
-      date: "Jan 5, 2025",
-      changes: [
-        { name: "LDL Cholesterol", trend: "down" },
-        { name: "HDL Cholesterol", trend: "up" },
-        { name: "Triglycerides", trend: "down" },
-      ],
+    {
+      id: "new-2",
+      testName: "Lipid Panel",
+      status: "normal",
+      reason: "Cholesterol monitoring",
+      dateTaken: "Apr 15, 2025",
+      labName: "LabCorp",
+      profiles: ["LDL", "HDL", "Total Cholesterol", "Triglycerides"],
+      previousTest: {
+        date: "Jan 5, 2025",
+        changes: [
+          { name: "LDL Cholesterol", trend: "down" },
+          { name: "HDL Cholesterol", trend: "up" },
+          { name: "Triglycerides", trend: "down" },
+        ],
+      },
     },
-  },
-];
+  ];
 
-const mockLastResults = [
-  {
-    id: "last-1",
-    testName: "Comprehensive Metabolic Panel",
-    status: "normal",
-    reason: "Routine screening",
-    dateTaken: "Jan 10, 2025",
-    labName: "Memorial Hospital",
-    profiles: ["Glucose", "Electrolytes", "Kidney function", "Liver function"],
-    relatedTests: ["Vitamin D", "Calcium"],
-  },
-  {
-    id: "last-2",
-    testName: "Thyroid Function",
-    status: "follow-up",
-    reason: "Follow-up monitoring",
-    dateTaken: "Dec 5, 2024",
-    labName: "Quest Diagnostics",
-    profiles: ["TSH", "Free T4", "Free T3"],
-    abnormalValues: ["TSH: 5.8 uIU/mL (High)"],
-    previousTest: {
-      date: "Jun 15, 2024",
-      changes: [
-        { name: "TSH", trend: "up" },
-        { name: "Free T4", trend: "stable" },
+const mockLastResults: import("@/components/results-summary").ResultCardProps[] =
+  [
+    {
+      id: "last-1",
+      testName: "Comprehensive Metabolic Panel",
+      status: "normal",
+      reason: "Routine screening",
+      dateTaken: "Jan 10, 2025",
+      labName: "Memorial Hospital",
+      profiles: [
+        "Glucose",
+        "Electrolytes",
+        "Kidney function",
+        "Liver function",
       ],
+      relatedTests: ["Vitamin D", "Calcium"],
     },
-  },
-];
+    {
+      id: "last-2",
+      testName: "Thyroid Function",
+      status: "follow-up",
+      reason: "Follow-up monitoring",
+      dateTaken: "Dec 5, 2024",
+      labName: "Quest Diagnostics",
+      profiles: ["TSH", "Free T4", "Free T3"],
+      abnormalValues: ["TSH: 5.8 uIU/mL (High)"],
+      previousTest: {
+        date: "Jun 15, 2024",
+        changes: [
+          { name: "TSH", trend: "up" },
+          { name: "Free T4", trend: "stable" },
+        ],
+      },
+    },
+  ];
 
-const mockUpcomingResults = [
-  {
-    id: "upcoming-1",
-    testName: "Vitamin D Panel",
-    status: "pending",
-    reason: "Deficiency check",
-    dateTaken: "Scheduled for May 10, 2025",
-    labName: "Quest Diagnostics",
-    profiles: ["25-OH Vitamin D"],
-    relatedTests: ["Calcium", "Phosphorus"],
-  },
-];
+const mockUpcomingResults: import("@/components/results-summary").ResultCardProps[] =
+  [
+    {
+      id: "upcoming-1",
+      testName: "Vitamin D Panel",
+      status: "pending",
+      reason: "Deficiency check",
+      dateTaken: "Scheduled for May 10, 2025",
+      labName: "Quest Diagnostics",
+      profiles: ["25-OH Vitamin D"],
+      relatedTests: ["Calcium", "Phosphorus"],
+    },
+  ];
 
 export default function ResultsPage() {
   const { patientData, isLoading } = usePatient();
@@ -209,9 +218,7 @@ export default function ResultsPage() {
 
       {/* Hero Section - greeting and title only */}
       <div className="p-6 max-w-[640px] mx-auto">
-        <p className="text-lg font-medium mb-1">
-          Hello, {patientData.name.split(" ")[0]} 👋
-        </p>
+        <p className="text-2xl font-bold mb-1">Alex Francis</p>
         <div className="flex flex-col space-y-1 mt-2">
           <div className="flex items-center">
             <svg
@@ -227,7 +234,7 @@ export default function ResultsPage() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span className="text-sm text-[#03659C]">Patient ID:</span>
+            <span className="text-xs text-[#03659C]">Patient ID:</span>
             <span className="text-sm ml-1">A6294</span>
           </div>
           <div className="flex items-center">
@@ -245,7 +252,7 @@ export default function ResultsPage() {
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <span className="text-sm text-[#03659C]">Insurance provider:</span>
+            <span className="text-xs text-[#03659C]">Insurance provider:</span>
             <span className="text-sm ml-1">BlueCross BlueShield</span>
           </div>
         </div>
@@ -260,88 +267,192 @@ export default function ResultsPage() {
       />
 
       {/* Lab Test Booking Options and Other Hero Components */}
-      <div className="p-6 pt-0 max-w-[640px] mx-auto">
-        <div className="mb-4">
+      <div className="p-6 pt-0 max-w-[640px] mx-auto mt-10 mb-10">
+        <div className="mb-6">
           <h2 className="text-lg font-medium text-[#03659C] mb-3">
             Book a Lab Test
           </h2>
 
-          <div className="grid grid-cols-3 gap-4 mb-3">
-            {/* First Row */}
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=blood-panel"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <Droplet className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Blood Panel
-              </span>
-            </div>
+          <div className="space-y-3">
+            {/* Blood Panel Card */}
+            <Link href="/book-test?type=blood" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <Droplet size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      Blood Panel
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        $39
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Broad screen for anemia, infection & organ health
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-blue-50 text-[#03659C] rounded text-xs">
+                      Covered by insurance
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=cholesterol"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <Heart className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Cholesterol
-              </span>
-            </div>
+            {/* Cholesterol Card */}
+            <Link href="/book-test?type=lipids" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <Heart size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      Cholesterol
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        $29
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Checks LDL / HDL to gauge heart-disease risk
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-blue-50 text-[#03659C] rounded text-xs">
+                      Covered by insurance
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=vitamin-panel"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <Sun className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Vitamin Panel
-              </span>
-            </div>
-          </div>
+            {/* Vitamin Panel Card */}
+            <Link href="/book-test?type=vitamin" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <Sun size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      Vitamin Panel
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        $45
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Assesses vitamin levels including D, B12, and folate
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                      Not covered by insurance
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-          <div className="grid grid-cols-3 gap-4">
-            {/* Second Row */}
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=thyroid"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <Activity className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Thyroid
-              </span>
-            </div>
+            {/* Thyroid Function Card */}
+            <Link href="/book-test?type=thyroid" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <Activity size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      Thyroid Function
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        $35
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Checks thyroid hormone levels to evaluate metabolism
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-blue-50 text-[#03659C] rounded text-xs">
+                      Covered by insurance
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=diabetes"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <ActivitySquare className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Diabetes
-              </span>
-            </div>
+            {/* A1C Test Card */}
+            <Link href="/book-test?type=a1c" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <ActivitySquare size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      A1C Test
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        $25
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Monitors blood sugar control over the past 3 months
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-blue-50 text-[#03659C] rounded text-xs">
+                      Covered by insurance
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-            <div className="flex flex-col items-center">
-              <Link
-                href="/book-test?type=comprehensive"
-                className="w-16 h-16 rounded-full bg-[#E5F8FF] hover:bg-[#D5F0FF] transition-colors flex items-center justify-center mb-2 border border-[#03659C]/10"
-              >
-                <ClipboardCheck className="h-7 w-7 text-[#03659C]" />
-              </Link>
-              <span className="text-xs text-[#03659C]/80 text-center">
-                Comprehensive
-              </span>
-            </div>
+            {/* Comprehensive Panel Card */}
+            <Link href="/book-test?type=comprehensive" className="block">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-4 flex items-start w-full transition-all hover:translate-y-[-1px]">
+                <div className="w-12 h-12 rounded-full bg-[#E5F8FF] flex items-center justify-center shrink-0">
+                  <ClipboardCheck size={20} className="text-[#03659C]" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div className="text-sm font-semibold text-[#03659C]">
+                      Comprehensive
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-[#03659C]">
+                        Included
+                      </span>
+                      <ChevronRight size={16} className="text-[#03659C] ml-1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                    Complete health assessment with all major panels
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <span className="inline-block px-2 py-0.5 bg-green-50 text-green-600 rounded text-xs">
+                      Included in your plan
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </div>
